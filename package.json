@@ -1,5 +1,20 @@
 {
+  "name": "grammar-selector",
+  "version": "0.0.0",
   "main": "./lib/grammar-selector",
   "description": "Select the grammar to use for the current editor.",
-  "activationEvents": "grammar-selector:show"
+  "activationEvents": "grammar-selector:show",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/atom/grammar-selector.git"
+  },
+  "bugs": {
+    "url": "https://github.com/atom/grammar-selector/issues"
+  },
+  "engines": {
+    "atom": "*"
+  },
+  "publishConfig": {
+    "registry": "https://atom.iriscouch.com/registry/_design/app/_rewrite"
+  }
 }
