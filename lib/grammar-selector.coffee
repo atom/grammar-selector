@@ -15,6 +15,7 @@ class GrammarSelector extends SelectList
   initialize: ->
     @editor = rootView.getActiveView()
     return unless @editor instanceof Editor
+    @list.addClass('mark-active') # TODO: there may be a better way to specify this.
     @currentGrammar = @editor.getGrammar()
     @autoDetect = name: 'Auto Detect'
     @currentGrammar = @autoDetect if @currentGrammar is syntax.nullGrammar
@@ -28,10 +29,8 @@ class GrammarSelector extends SelectList
     @attach()
 
   itemForElement: (grammar) ->
-    if grammar is @currentGrammar
-      grammarClass = 'active-item'
-    else
-      grammarClass = 'inactive-item'
+    grammarClass = ''
+    grammarClass = 'active' if grammar is @currentGrammar
 
     $$ ->
       @li grammar.name, class: grammarClass
