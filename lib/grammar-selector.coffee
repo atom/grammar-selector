@@ -16,8 +16,9 @@ class GrammarSelector extends SelectList
     @editor = rootView.getActiveView()
     return unless @editor instanceof Editor
     @currentGrammar = @editor.getGrammar()
-    @path = @editor.getPath()
     @autoDetect = name: 'Auto Detect'
+    @currentGrammar = @autoDetect if @currentGrammar is syntax.nullGrammar
+    @path = @editor.getPath()
     @command 'grammar-selector:show', =>
       @cancel()
       false

@@ -48,3 +48,10 @@ describe "GrammarSelector", ->
       grammarView = rootView.find('.grammar-selector').view()
       grammarView.confirmed(grammarView.array[0])
       expect(editor.getGrammar()).toBe jsGrammar
+
+  describe "when the editor's current grammar is the null grammar", ->
+    it "displays Auto Detect as the selected grammar", ->
+      editor.activeEditSession.setGrammar(syntax.nullGrammar)
+      editor.trigger 'grammar-selector:show'
+      grammarView = rootView.find('.grammar-selector').view()
+      expect(grammarView.list.children('li.active-item').text()).toBe 'Auto Detect'
