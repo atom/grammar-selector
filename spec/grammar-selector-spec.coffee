@@ -54,4 +54,4 @@ describe "GrammarSelector", ->
       editor.activeEditSession.setGrammar(syntax.nullGrammar)
       editor.trigger 'grammar-selector:show'
       grammarView = rootView.find('.grammar-selector').view()
-      expect(grammarView.list.children('li.active-item').text()).toBe 'Auto Detect'
+      expect(grammarView.list.children('li.active').text()).toBe 'Auto Detect'
