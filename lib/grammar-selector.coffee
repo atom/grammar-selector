@@ -1,7 +1,4 @@
-SelectList = require 'select-list'
-Editor = require 'editor'
-{$$} = require 'space-pen'
-_ = require 'underscore'
+{_, $$, Editor, SelectList} = require 'atom-api'
 
 module.exports =
 class GrammarSelector extends SelectList
