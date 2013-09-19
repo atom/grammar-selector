@@ -1,5 +1,5 @@
 GrammarSelector = require '../lib/grammar-selector'
-{_, $, RootView} = require 'atom-api'
+{_, $, RootView} = require 'atom'
 
 describe "GrammarSelector", ->
   [editor, textGrammar, jsGrammar] =  []

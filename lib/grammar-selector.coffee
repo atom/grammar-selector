@@ -1,4 +1,4 @@
-{_, $$, Editor, SelectList} = require 'atom-api'
+{_, $$, Editor, SelectList} = require 'atom'
 
 module.exports =
 class GrammarSelector extends SelectList
