@@ -9,7 +9,7 @@ describe "GrammarSelector", ->
     atom.activatePackage('grammar-selector')
     atom.activatePackage('text-tmbundle', sync: true)
     atom.activatePackage('javascript-tmbundle', sync: true)
-    rootView.open('sample.js')
+    rootView.openSync('sample.js')
     editor = rootView.getActiveView()
     textGrammar = _.find syntax.grammars, (grammar) -> grammar.name is 'Plain Text'
     expect(textGrammar).toBeTruthy()
