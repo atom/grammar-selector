@@ -1,0 +1,7 @@
+'menu': [
+  'label': 'Edit'
+  'submenu': [
+    'label': 'Select Grammar'
+    'command': 'grammar-selector:show'
+  ]
+]
