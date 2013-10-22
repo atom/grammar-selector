@@ -7,8 +7,8 @@ describe "GrammarSelector", ->
   beforeEach ->
     window.rootView = new RootView
     atom.activatePackage('grammar-selector')
-    atom.activatePackage('text-tmbundle', sync: true)
-    atom.activatePackage('javascript-tmbundle', sync: true)
+    atom.activatePackage('language-text', sync: true)
+    atom.activatePackage('language-javascript', sync: true)
     rootView.openSync('sample.js')
     editor = rootView.getActiveView()
     textGrammar = _.find syntax.grammars, (grammar) -> grammar.name is 'Plain Text'
