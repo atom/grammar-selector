@@ -1,6 +1,6 @@
 {
   "name": "grammar-selector",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "main": "./lib/grammar-selector",
   "description": "Select the grammar to use for the current editor.",
   "activationEvents": "grammar-selector:show",
