@@ -5,17 +5,18 @@ class GrammarSelector extends SelectList
   @viewClass: -> "#{super} grammar-selector from-top overlay"
 
   @activate: ->
-    rootView.command 'grammar-selector:show', '.editor', => new GrammarSelector()
+    atom.rootView.command 'grammar-selector:show', '.editor', =>
+      new GrammarSelector()
 
   filterKey: 'name'
 
   initialize: ->
-    @editor = rootView.getActiveView()
+    @editor = atom.rootView.getActiveView()
     return unless @editor instanceof Editor
     @list.addClass('mark-active') # TODO: there may be a better way to specify this.
     @currentGrammar = @editor.getGrammar()
     @autoDetect = name: 'Auto Detect'
-    @currentGrammar = @autoDetect if @currentGrammar is syntax.nullGrammar
+    @currentGrammar = @autoDetect if @currentGrammar is atom.syntax.nullGrammar
     @path = @editor.getPath()
     @command 'grammar-selector:show', =>
       @cancel()
@@ -33,8 +34,8 @@ class GrammarSelector extends SelectList
       @li grammar.name, class: grammarClass
 
   populate: ->
-    grammars = new Array(syntax.grammars...)
-    grammars = _.reject grammars, (grammar) -> grammar is syntax.nullGrammar
+    grammars = new Array(atom.syntax.grammars...)
+    grammars = _.reject grammars, (grammar) -> grammar is atom.syntax.nullGrammar
     grammars.sort (grammarA, grammarB) ->
       if grammarA.scopeName is 'text.plain'
         -1
@@ -52,12 +53,13 @@ class GrammarSelector extends SelectList
   confirmed: (grammar) ->
     @cancel()
     if grammar is @autoDetect
-      syntax.clearGrammarOverrideForPath(@path)
+      atom.syntax.clearGrammarOverrideForPath(@path)
     else
-      syntax.setGrammarOverrideForPath(@path, grammar.scopeName)
+      atom.syntax.setGrammarOverrideForPath(@path, grammar.scopeName)
     @editor.reloadGrammar()
 
   attach: ->
     super
-    rootView.append(this)
+
+    atom.rootView.append(this)
     @miniEditor.focus()
