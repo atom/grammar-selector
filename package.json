@@ -3,7 +3,6 @@
   "version": "0.9.0",
   "main": "./lib/grammar-selector",
   "description": "Select the grammar to use for the current editor.",
-  "activationEvents": "grammar-selector:show",
   "repository": {
     "type": "git",
     "url": "https://github.com/atom/grammar-selector.git"
