@@ -1,3 +1,5 @@
-'.editor':
-  'meta-L': 'grammar-selector:show'
+'.platform-darwin .editor':
+  'cmd-L': 'grammar-selector:show'
 
+'.platform-win32 .editor':
+  'ctrl-L': 'grammar-selector:show'
