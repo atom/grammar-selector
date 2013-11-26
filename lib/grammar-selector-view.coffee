@@ -1,4 +1,4 @@
-{_, $$, Editor, SelectList} = require 'atom'
+{_, $$, EditorView, SelectList} = require 'atom'
 
 module.exports =
 class GrammarSelector extends SelectList
@@ -8,7 +8,7 @@ class GrammarSelector extends SelectList
 
   initialize: ->
     @editor = atom.workspaceView.getActiveView()
-    return unless @editor instanceof Editor
+    return unless @editor instanceof EditorView
     @list.addClass('mark-active') # TODO: there may be a better way to specify this.
     @currentGrammar = @editor.getGrammar()
     @autoDetect = name: 'Auto Detect'

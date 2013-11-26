@@ -59,7 +59,7 @@ describe "GrammarSelector", ->
 
   describe "when the editor's current grammar is the null grammar", ->
     it "displays Auto Detect as the selected grammar", ->
-      editor.activeEditSession.setGrammar(atom.syntax.nullGrammar)
+      editor.setGrammar(atom.syntax.nullGrammar)
       editor.trigger 'grammar-selector:show'
       grammarView = atom.workspaceView.find('.grammar-selector').view()
       expect(grammarView.list.children('li.active').text()).toBe 'Auto Detect'
@@ -90,7 +90,7 @@ describe "GrammarSelector", ->
 
     it "displays Plain Text when the current grammar is the null grammar", ->
       atom.workspaceView.attachToDom()
-      editor.activeEditSession.setGrammar(atom.syntax.nullGrammar)
+      editor.setGrammar(atom.syntax.nullGrammar)
       expect(statusBar.find('.grammar-name')).toBeVisible()
       expect(statusBar.find('.grammar-name').text()).toBe 'Plain Text'
       editor.reloadGrammar()
@@ -100,7 +100,7 @@ describe "GrammarSelector", ->
     it "hides the label when the current grammar is null", ->
       atom.workspaceView.attachToDom()
       spyOn(editor, 'getGrammar').andReturn null
-      editor.activeEditSession.setGrammar(atom.syntax.nullGrammar)
+      editor.setGrammar(atom.syntax.nullGrammar)
 
       expect(statusBar.find('.grammar-name')).toBeHidden()
 
