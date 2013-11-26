@@ -9,13 +9,13 @@ class GrammarStatusView extends View
     @subscribe @statusBar, 'active-buffer-changed', @updateGrammarText
 
     @subscribe this, 'click', => @getActiveView().trigger('grammar-selector:show'); false
-    @subscribe atom.rootView, 'editor:grammar-changed', @updateGrammarText
+    @subscribe atom.workspaceView, 'editor:grammar-changed', @updateGrammarText
 
   afterAttach: ->
     @updateGrammarText()
 
   getActiveView: ->
-    atom.rootView.getActiveView()
+    atom.workspaceView.getActiveView()
 
   updateGrammarText: =>
     grammar = @getActiveView()?.getGrammar?()

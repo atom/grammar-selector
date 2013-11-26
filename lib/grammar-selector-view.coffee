@@ -7,7 +7,7 @@ class GrammarSelector extends SelectList
   filterKey: 'name'
 
   initialize: ->
-    @editor = atom.rootView.getActiveView()
+    @editor = atom.workspaceView.getActiveView()
     return unless @editor instanceof Editor
     @list.addClass('mark-active') # TODO: there may be a better way to specify this.
     @currentGrammar = @editor.getGrammar()
@@ -57,5 +57,5 @@ class GrammarSelector extends SelectList
   attach: ->
     super
 
-    atom.rootView.append(this)
+    atom.workspaceView.append(this)
     @miniEditor.focus()

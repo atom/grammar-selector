@@ -3,14 +3,14 @@ GrammarSelectorView = require './grammar-selector-view'
 
 module.exports =
   activate: ->
-    atom.rootView.command 'grammar-selector:show', '.editor', =>
+    atom.workspaceView.command 'grammar-selector:show', '.editor', =>
       new GrammarSelectorView()
 
     createStatusEntry = ->
-      view = new GrammarStatusView(atom.rootView.statusBar)
-      atom.rootView.statusBar.appendLeft(view)
+      view = new GrammarStatusView(atom.workspaceView.statusBar)
+      atom.workspaceView.statusBar.appendLeft(view)
 
-    if atom.rootView.statusBar
+    if atom.workspaceView.statusBar
       createStatusEntry()
     else
       atom.packages.once 'activated', ->
