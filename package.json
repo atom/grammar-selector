@@ -3,17 +3,8 @@
   "version": "0.13.0",
   "main": "./lib/grammar-selector",
   "description": "Select the grammar to use for the current editor.",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/atom/grammar-selector.git"
-  },
-  "bugs": {
-    "url": "https://github.com/atom/grammar-selector/issues"
-  },
+  "repository": "https://github.com/atom/grammar-selector",
   "engines": {
     "atom": "*"
-  },
-  "publishConfig": {
-    "registry": "https://atom.cloudant.com/registry/_design/app/_rewrite"
   }
 }
