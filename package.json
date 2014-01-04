@@ -1,6 +1,6 @@
 {
   "name": "grammar-selector",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "main": "./lib/grammar-selector",
   "description": "Select the grammar to use for the current editor.",
   "repository": "https://github.com/atom/grammar-selector",
