@@ -6,7 +6,7 @@ class StatusBarMock extends View
       @div outlet: 'leftPanel', class: 'status-bar-left'
 
   attach: ->
-    atom.workspaceView.vertical.append(this)
+    atom.workspaceView.appendToTop(this)
 
   appendLeft: (item) ->
     @leftPanel.append(item)
