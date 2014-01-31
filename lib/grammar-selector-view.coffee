@@ -1,7 +1,7 @@
-{_, $$, SelectList} = require 'atom'
+{_, $$, SelectListView} = require 'atom'
 
 module.exports =
-class GrammarSelector extends SelectList
+class GrammarSelector extends SelectListView
   @viewClass: -> "#{super} grammar-selector from-top overlay"
 
   filterKey: 'name'
