@@ -16,17 +16,25 @@ describe "GrammarSelector", ->
 
   beforeEach ->
     atom.workspaceView = new WorkspaceView
-    atom.packages.activatePackage('grammar-selector')
-    atom.packages.activatePackage('language-text', sync: true)
-    atom.packages.activatePackage('language-javascript', sync: true)
-    atom.workspaceView.openSync('sample.js')
-    editorView = atom.workspaceView.getActiveView()
-    {editor} = editorView
-    textGrammar = _.find atom.syntax.grammars, (grammar) -> grammar.name is 'Plain Text'
-    expect(textGrammar).toBeTruthy()
-    jsGrammar = _.find atom.syntax.grammars, (grammar) -> grammar.name is 'JavaScript'
-    expect(jsGrammar).toBeTruthy()
-    expect(editor.getGrammar()).toBe jsGrammar
+
+    waitsForPromise ->
+      atom.packages.activatePackage('grammar-selector')
+
+    waitsForPromise ->
+      atom.packages.activatePackage('language-text')
+
+    waitsForPromise ->
+      atom.packages.activatePackage('language-javascript')
+
+    runs ->
+      atom.workspaceView.openSync('sample.js')
+      editorView = atom.workspaceView.getActiveView()
+      {editor} = editorView
+      textGrammar = _.find atom.syntax.grammars, (grammar) -> grammar.name is 'Plain Text'
+      expect(textGrammar).toBeTruthy()
+      jsGrammar = _.find atom.syntax.grammars, (grammar) -> grammar.name is 'JavaScript'
+      expect(jsGrammar).toBeTruthy()
+      expect(editor.getGrammar()).toBe jsGrammar
 
   describe "when grammar-selector:show is triggered", ->
     it "displays a list of all the available grammars", ->
