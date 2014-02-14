@@ -9,9 +9,8 @@ class GrammarSelectorView extends SelectListView
     @addClass('grammar-selector from-top overlay')
     @list.addClass('mark-active')
 
-    @currentGrammar = @editor.getGrammar()
-
     @autoDetect = name: 'Auto Detect'
+    @currentGrammar = @editor.getGrammar()
     @currentGrammar = @autoDetect if @currentGrammar is atom.syntax.nullGrammar
 
     @command 'grammar-selector:show', =>
