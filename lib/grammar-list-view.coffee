@@ -18,7 +18,6 @@ class GrammarListView extends SelectListView
       false
 
     @setItems(@getGrammars())
-    @attach()
 
   getFilterKey: ->
     'name'

@@ -15,6 +15,9 @@ class GrammarStatusView extends View
 
     @subscribe atom.workspaceView, 'editor:grammar-changed', @updateGrammarText
 
+  attach: ->
+    @statusBar.appendLeft(this)
+
   afterAttach: ->
     @updateGrammarText()
 
