@@ -7,10 +7,13 @@ class GrammarStatusView extends View
     @a href: '#', class: 'grammar-name inline-block'
 
   initialize: (@statusBar) ->
-    @subscribe @statusBar, 'active-buffer-changed', @updateGrammarText
-    @subscribe atom.workspaceView, 'editor:grammar-changed', @updateGrammarText
+    @subscribe @statusBar, 'active-buffer-changed', =>
+      @updateGrammarText()
 
-    @subscribe this, 'click', =>
+    @subscribe atom.workspaceView, 'editor:grammar-changed', =>
+      @updateGrammarText()
+
+    @subscribe this, 'click', ->
       atom.workspaceView.trigger('grammar-selector:show')
       false
 
@@ -20,7 +23,7 @@ class GrammarStatusView extends View
   afterAttach: ->
     @updateGrammarText()
 
-  updateGrammarText: =>
+  updateGrammarText: ->
     grammar = atom.workspace.getActiveEditor()?.getGrammar?()
     if grammar?
       if grammar is atom.syntax.nullGrammar
