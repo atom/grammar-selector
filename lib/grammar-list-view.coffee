@@ -39,7 +39,7 @@ class GrammarListView extends SelectListView
   attach: ->
     @storeFocusedElement()
     atom.workspaceView.append(this)
-    @focusEditor()
+    @focusFilterEditor()
 
   getGrammars: ->
     grammars = atom.syntax.getGrammars().filter (grammar) ->
