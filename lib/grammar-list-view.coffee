@@ -13,7 +13,7 @@ class GrammarListView extends SelectListView
     @currentGrammar = @editor.getGrammar()
     @currentGrammar = @autoDetect if @currentGrammar is atom.syntax.nullGrammar
 
-    @command 'grammar-selector:show', =>
+    @subscribe this, 'grammar-selector:show', =>
       @cancel()
       false
 
