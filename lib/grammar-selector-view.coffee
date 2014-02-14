@@ -1,32 +1,34 @@
-{_, $$, SelectListView} = require 'atom'
+{_, SelectListView} = require 'atom'
 
 module.exports =
 class GrammarSelector extends SelectListView
-  @viewClass: -> "#{super} grammar-selector from-top overlay"
-
-  filterKey: 'name'
-
   initialize: ->
+    super
+
+    @addClass('grammar-selector from-top overlay')
+    @list.addClass('mark-active')
+
     @editor = atom.workspaceView.getActivePaneItem()
-    @list.addClass('mark-active') # TODO: there may be a better way to specify this.
     @currentGrammar = @editor.getGrammar()
+
     @autoDetect = name: 'Auto Detect'
     @currentGrammar = @autoDetect if @currentGrammar is atom.syntax.nullGrammar
-    @path = @editor.getPath()
+
     @command 'grammar-selector:show', =>
       @cancel()
       false
-    super
 
     @populate()
     @attach()
 
-  itemForElement: (grammar) ->
-    grammarClass = ''
-    grammarClass = 'active' if grammar is @currentGrammar
+  getFilterKey: ->
+    'name'
 
-    $$ ->
-      @li grammar.name, class: grammarClass
+  viewForItem: (grammar) ->
+    element = document.createElement('li')
+    element.classList.add('active') if grammar is @currentGrammar
+    element.textContent = grammar.name
+    element
 
   populate: ->
     grammars = atom.syntax.grammars.filter (grammar) ->
@@ -37,25 +39,21 @@ class GrammarSelector extends SelectListView
         -1
       else if grammarB.scopeName is 'text.plain'
         1
-      else if grammarA.name < grammarB.name
-        -1
-      else if grammarA.name > grammarB.name
-        1
       else
-        0
+        grammarA.name.localeCompare(grammarB.name)
     grammars.unshift(@autoDetect)
-    @setArray(grammars)
+    @setItems(grammars)
 
   confirmed: (grammar) ->
     @cancel()
     if grammar is @autoDetect
-      atom.syntax.clearGrammarOverrideForPath(@path)
+      atom.syntax.clearGrammarOverrideForPath(@editor.getPath())
     else
-      atom.syntax.setGrammarOverrideForPath(@path, grammar.scopeName)
+      atom.syntax.setGrammarOverrideForPath(@editor.getPath(), grammar.scopeName)
     @editor.reloadGrammar()
 
   attach: ->
     super
 
     atom.workspaceView.append(this)
-    @miniEditor.focus()
+    @focusEditor()
