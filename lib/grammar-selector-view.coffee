@@ -31,7 +31,7 @@ class GrammarSelectorView extends SelectListView
     element
 
   populate: ->
-    grammars = atom.syntax.grammars.filter (grammar) ->
+    grammars = atom.syntax.getGrammars().filter (grammar) ->
       grammar isnt atom.syntax.nullGrammar
 
     grammars.sort (grammarA, grammarB) ->
