@@ -17,7 +17,7 @@ class GrammarSelectorView extends SelectListView
       @cancel()
       false
 
-    @populate()
+    @setItems(@getGrammars())
     @attach()
 
   getFilterKey: ->
@@ -29,7 +29,20 @@ class GrammarSelectorView extends SelectListView
     element.textContent = grammar.name
     element
 
-  populate: ->
+  confirmed: (grammar) ->
+    @cancel()
+    if grammar is @autoDetect
+      atom.syntax.clearGrammarOverrideForPath(@editor.getPath())
+    else
+      atom.syntax.setGrammarOverrideForPath(@editor.getPath(), grammar.scopeName)
+    @editor.reloadGrammar()
+
+  attach: ->
+    @storeFocusedElement()
+    atom.workspaceView.append(this)
+    @focusEditor()
+
+  getGrammars: ->
     grammars = atom.syntax.getGrammars().filter (grammar) ->
       grammar isnt atom.syntax.nullGrammar
 
@@ -41,18 +54,4 @@ class GrammarSelectorView extends SelectListView
       else
         grammarA.name.localeCompare(grammarB.name)
     grammars.unshift(@autoDetect)
-    @setItems(grammars)
-
-  confirmed: (grammar) ->
-    @cancel()
-    if grammar is @autoDetect
-      atom.syntax.clearGrammarOverrideForPath(@editor.getPath())
-    else
-      atom.syntax.setGrammarOverrideForPath(@editor.getPath(), grammar.scopeName)
-    @editor.reloadGrammar()
-
-  attach: ->
-    super
-
-    atom.workspaceView.append(this)
-    @focusEditor()
+    grammars
