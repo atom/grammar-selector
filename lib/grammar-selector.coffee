@@ -11,7 +11,7 @@ module.exports =
       view = new GrammarStatusView(atom.workspaceView.statusBar)
       atom.workspaceView.statusBar.appendLeft(view)
 
-    if atom.workspaceView.statusBar
+    if atom.workspaceView.statusBar?
       createStatusEntry()
     else
       atom.packages.once 'activated', ->
