@@ -1,4 +1,4 @@
-{_, $, WorkspaceView, View} = require 'atom'
+{$, WorkspaceView, View} = require 'atom'
 
 class StatusBarMock extends View
   @content: ->
@@ -16,6 +16,7 @@ describe "GrammarSelector", ->
 
   beforeEach ->
     atom.workspaceView = new WorkspaceView
+    atom.workspace = atom.workspaceView.model
 
     waitsForPromise ->
       atom.packages.activatePackage('grammar-selector')
@@ -30,9 +31,9 @@ describe "GrammarSelector", ->
       atom.workspaceView.openSync('sample.js')
       editorView = atom.workspaceView.getActiveView()
       {editor} = editorView
-      textGrammar = _.find atom.syntax.grammars, (grammar) -> grammar.name is 'Plain Text'
+      textGrammar = atom.syntax.grammarForScopeName('text.plain')
       expect(textGrammar).toBeTruthy()
-      jsGrammar = _.find atom.syntax.grammars, (grammar) -> grammar.name is 'JavaScript'
+      jsGrammar = atom.syntax.grammarForScopeName('source.js')
       expect(jsGrammar).toBeTruthy()
       expect(editor.getGrammar()).toBe jsGrammar
 
@@ -63,7 +64,7 @@ describe "GrammarSelector", ->
 
       editorView.trigger 'grammar-selector:show'
       grammarView = atom.workspaceView.find('.grammar-selector').view()
-      grammarView.confirmed(grammarView.array[0])
+      grammarView.confirmed(grammarView.items[0])
       expect(editor.getGrammar()).toBe jsGrammar
 
   describe "when the editor's current grammar is the null grammar", ->
@@ -73,55 +74,49 @@ describe "GrammarSelector", ->
       grammarView = atom.workspaceView.find('.grammar-selector').view()
       expect(grammarView.list.children('li.active').text()).toBe 'Auto Detect'
 
-  describe "adding grammar selector to the status-bar", ->
+  describe "grammar label", ->
+    [grammarStatus] = []
+
     beforeEach ->
       atom.workspaceView.statusBar = new StatusBarMock()
       atom.workspaceView.statusBar.attach()
       atom.packages.emit('activated')
 
-    it 'is in the status-bar', ->
-      expect(atom.workspaceView.find('.status-bar .grammar-name')).toExist()
-
-  describe "grammar label", ->
-    statusBar = null
-
-    beforeEach ->
-      atom.workspaceView.statusBar = statusBar = new StatusBarMock()
-      atom.workspaceView.statusBar.attach()
-      atom.packages.emit('activated')
+      grammarStatus = atom.workspaceView.statusBar.leftPanel.children().view()
+      expect(grammarStatus).toExist()
 
     afterEach ->
       atom.workspaceView.statusBar.remove()
       atom.workspaceView.statusBar = null
 
     it "displays the name of the current grammar", ->
-      expect(statusBar.find('.grammar-name').text()).toBe 'JavaScript'
+      expect(grammarStatus.text()).toBe 'JavaScript'
 
     it "displays Plain Text when the current grammar is the null grammar", ->
       atom.workspaceView.attachToDom()
       editor.setGrammar(atom.syntax.nullGrammar)
-      expect(statusBar.find('.grammar-name')).toBeVisible()
-      expect(statusBar.find('.grammar-name').text()).toBe 'Plain Text'
+      expect(grammarStatus).toBeVisible()
+      expect(grammarStatus.text()).toBe 'Plain Text'
       editor.reloadGrammar()
-      expect(statusBar.find('.grammar-name')).toBeVisible()
-      expect(statusBar.find('.grammar-name').text()).toBe 'JavaScript'
+      expect(grammarStatus).toBeVisible()
+      expect(grammarStatus.text()).toBe 'JavaScript'
 
     it "hides the label when the current grammar is null", ->
       atom.workspaceView.attachToDom()
       spyOn(editor, 'getGrammar').andReturn null
       editor.setGrammar(atom.syntax.nullGrammar)
 
-      expect(statusBar.find('.grammar-name')).toBeHidden()
+      expect(grammarStatus).toBeHidden()
 
     describe "when the editor's grammar changes", ->
       it "displays the new grammar of the editor", ->
         atom.syntax.setGrammarOverrideForPath(editor.getPath(), 'text.plain')
         editor.reloadGrammar()
-        expect(statusBar.find('.grammar-name').text()).toBe 'Plain Text'
+        expect(grammarStatus.text()).toBe 'Plain Text'
 
     describe "when clicked", ->
       it "toggles the grammar-selector:show event", ->
         eventHandler = jasmine.createSpy('eventHandler')
-        editorView.on 'grammar-selector:show', eventHandler
-        statusBar.find('.grammar-name').click()
+        atom.workspaceView.on 'grammar-selector:show', eventHandler
+        grammarStatus.click()
         expect(eventHandler).toHaveBeenCalled()
