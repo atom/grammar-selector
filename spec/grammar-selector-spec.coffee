@@ -123,6 +123,6 @@ describe "GrammarSelector", ->
     describe "when clicked", ->
       it "toggles the grammar-selector:show event", ->
         eventHandler = jasmine.createSpy('eventHandler')
-        editorView.on 'grammar-selector:show', eventHandler
+        atom.workspaceView.on 'grammar-selector:show', eventHandler
         statusBar.find('.grammar-name').click()
         expect(eventHandler).toHaveBeenCalled()
