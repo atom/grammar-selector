@@ -1,7 +1,8 @@
 {SelectListView} = require 'atom'
 
+# View to display a list of grammars to apply to the current editor.
 module.exports =
-class GrammarSelector extends SelectListView
+class GrammarSelectorView extends SelectListView
   initialize: ->
     super
 

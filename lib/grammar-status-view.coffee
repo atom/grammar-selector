@@ -1,5 +1,6 @@
 {View} = require 'atom'
 
+# View to show the grammar name in the status bar.
 module.exports =
 class GrammarStatusView extends View
   @content: ->
