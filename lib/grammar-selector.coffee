@@ -1,18 +1,20 @@
-GrammarStatusView = require './grammar-status-view'
-GrammarSelectorView = require './grammar-selector-view'
-
 module.exports =
   activate: ->
-    atom.workspaceView.command 'grammar-selector:show', =>
-      editor = atom.workspace.getActiveEditor()
-      new GrammarSelectorView(editor) if editor?
+    atom.workspaceView.command 'grammar-selector:show', ->
+      createGrammarSelectorView()
 
-    createStatusEntry = ->
-      view = new GrammarStatusView(atom.workspaceView.statusBar)
-      atom.workspaceView.statusBar.appendLeft(view)
+    atom.packages.once 'activated', ->
+      createGrammarStatusView()
 
-    if atom.workspaceView.statusBar?
-      createStatusEntry()
-    else
-      atom.packages.once 'activated', ->
-        createStatusEntry()
+createGrammarSelectorView = ->
+  editor = atom.workspace.getActiveEditor()
+  if editor?
+    GrammarSelectorView = require './grammar-selector-view'
+    new GrammarSelectorView(editor)
+
+createGrammarStatusView = ->
+  statusBarView = atom.workspaceView.statusBar
+  if statusBarView?
+    GrammarStatusView = require './grammar-status-view'
+    view = new GrammarStatusView(statusBarView)
+    statusBarView.appendLeft(view)
