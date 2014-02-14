@@ -16,6 +16,7 @@ describe "GrammarSelector", ->
 
   beforeEach ->
     atom.workspaceView = new WorkspaceView
+    atom.workspace = atom.workspaceView.model
 
     waitsForPromise ->
       atom.packages.activatePackage('grammar-selector')
