@@ -1,4 +1,4 @@
-{_, $, WorkspaceView, View} = require 'atom'
+{$, WorkspaceView, View} = require 'atom'
 
 class StatusBarMock extends View
   @content: ->
