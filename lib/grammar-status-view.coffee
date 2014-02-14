@@ -21,7 +21,7 @@ class GrammarStatusView extends View
     @updateGrammarText()
 
   updateGrammarText: =>
-    grammar = atom.workspaceView.getActivePaneItem()?.getGrammar?()
+    grammar = atom.workspace.getActiveEditor()?.getGrammar?()
     if grammar?
       if grammar is atom.syntax.nullGrammar
         grammarName = 'Plain Text'
