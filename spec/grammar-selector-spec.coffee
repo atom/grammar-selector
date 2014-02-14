@@ -74,55 +74,49 @@ describe "GrammarSelector", ->
       grammarView = atom.workspaceView.find('.grammar-selector').view()
       expect(grammarView.list.children('li.active').text()).toBe 'Auto Detect'
 
-  describe "adding grammar selector to the status-bar", ->
+  describe "grammar label", ->
+    [grammarStatus] = []
+
     beforeEach ->
       atom.workspaceView.statusBar = new StatusBarMock()
       atom.workspaceView.statusBar.attach()
       atom.packages.emit('activated')
 
-    it 'is in the status-bar', ->
-      expect(atom.workspaceView.find('.status-bar .grammar-name')).toExist()
-
-  describe "grammar label", ->
-    statusBar = null
-
-    beforeEach ->
-      atom.workspaceView.statusBar = statusBar = new StatusBarMock()
-      atom.workspaceView.statusBar.attach()
-      atom.packages.emit('activated')
+      grammarStatus = atom.workspaceView.statusBar.leftPanel.children().view()
+      expect(grammarStatus).toExist()
 
     afterEach ->
       atom.workspaceView.statusBar.remove()
       atom.workspaceView.statusBar = null
 
     it "displays the name of the current grammar", ->
-      expect(statusBar.find('.grammar-name').text()).toBe 'JavaScript'
+      expect(grammarStatus.text()).toBe 'JavaScript'
 
     it "displays Plain Text when the current grammar is the null grammar", ->
       atom.workspaceView.attachToDom()
       editor.setGrammar(atom.syntax.nullGrammar)
-      expect(statusBar.find('.grammar-name')).toBeVisible()
-      expect(statusBar.find('.grammar-name').text()).toBe 'Plain Text'
+      expect(grammarStatus).toBeVisible()
+      expect(grammarStatus.text()).toBe 'Plain Text'
       editor.reloadGrammar()
-      expect(statusBar.find('.grammar-name')).toBeVisible()
-      expect(statusBar.find('.grammar-name').text()).toBe 'JavaScript'
+      expect(grammarStatus).toBeVisible()
+      expect(grammarStatus.text()).toBe 'JavaScript'
 
     it "hides the label when the current grammar is null", ->
       atom.workspaceView.attachToDom()
       spyOn(editor, 'getGrammar').andReturn null
       editor.setGrammar(atom.syntax.nullGrammar)
 
-      expect(statusBar.find('.grammar-name')).toBeHidden()
+      expect(grammarStatus).toBeHidden()
 
     describe "when the editor's grammar changes", ->
       it "displays the new grammar of the editor", ->
         atom.syntax.setGrammarOverrideForPath(editor.getPath(), 'text.plain')
         editor.reloadGrammar()
-        expect(statusBar.find('.grammar-name').text()).toBe 'Plain Text'
+        expect(grammarStatus.text()).toBe 'Plain Text'
 
     describe "when clicked", ->
       it "toggles the grammar-selector:show event", ->
         eventHandler = jasmine.createSpy('eventHandler')
         atom.workspaceView.on 'grammar-selector:show', eventHandler
-        statusBar.find('.grammar-name').click()
+        grammarStatus.click()
         expect(eventHandler).toHaveBeenCalled()
