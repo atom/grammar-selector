@@ -2,7 +2,7 @@
 
 # View to display a list of grammars to apply to the current editor.
 module.exports =
-class GrammarSelectorView extends SelectListView
+class GrammarListView extends SelectListView
   initialize: (@editor) ->
     super
 

@@ -1,16 +1,16 @@
 module.exports =
   activate: ->
     atom.workspaceView.command 'grammar-selector:show', ->
-      createGrammarSelectorView()
+      createGrammarListView()
 
     atom.packages.once 'activated', ->
       createGrammarStatusView()
 
-createGrammarSelectorView = ->
+createGrammarListView = ->
   editor = atom.workspace.getActiveEditor()
   if editor?
-    GrammarSelectorView = require './grammar-selector-view'
-    new GrammarSelectorView(editor)
+    GrammarListView = require './grammar-list-view'
+    new GrammarListView(editor)
 
 createGrammarStatusView = ->
   statusBarView = atom.workspaceView.statusBar
