@@ -4,7 +4,7 @@
 module.exports =
 class GrammarStatusView extends View
   @content: ->
-    @a href: '#', class: 'grammar-name inline-block'
+    @a href: '#', class: 'inline-block'
 
   initialize: (@statusBar) ->
     @subscribe @statusBar, 'active-buffer-changed', =>
