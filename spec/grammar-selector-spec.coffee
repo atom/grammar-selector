@@ -30,9 +30,9 @@ describe "GrammarSelector", ->
       atom.workspaceView.openSync('sample.js')
       editorView = atom.workspaceView.getActiveView()
       {editor} = editorView
-      textGrammar = _.find atom.syntax.grammars, (grammar) -> grammar.name is 'Plain Text'
+      textGrammar = atom.syntax.grammarForScopeName('text.plain')
       expect(textGrammar).toBeTruthy()
-      jsGrammar = _.find atom.syntax.grammars, (grammar) -> grammar.name is 'JavaScript'
+      jsGrammar = atom.syntax.grammarForScopeName('source.js')
       expect(jsGrammar).toBeTruthy()
       expect(editor.getGrammar()).toBe jsGrammar
 
@@ -63,7 +63,7 @@ describe "GrammarSelector", ->
 
       editorView.trigger 'grammar-selector:show'
       grammarView = atom.workspaceView.find('.grammar-selector').view()
-      grammarView.confirmed(grammarView.array[0])
+      grammarView.confirmed(grammarView.items[0])
       expect(editor.getGrammar()).toBe jsGrammar
 
   describe "when the editor's current grammar is the null grammar", ->
