@@ -29,8 +29,9 @@ class GrammarSelector extends SelectListView
       @li grammar.name, class: grammarClass
 
   populate: ->
-    grammars = new Array(atom.syntax.grammars...)
-    grammars = _.reject grammars, (grammar) -> grammar is atom.syntax.nullGrammar
+    grammars = atom.syntax.grammars.filter (grammar) ->
+      grammar isnt atom.syntax.nullGrammar
+
     grammars.sort (grammarA, grammarB) ->
       if grammarA.scopeName is 'text.plain'
         -1
