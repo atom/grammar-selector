@@ -1,3 +1,4 @@
-# Grammar selector package
+# Grammar Selector package
 
-Pick a grammar used for syntax highlighting using `meta-shift-l`.
+Pick the grammar used for syntax highlighting using `ctrl-shift-L` or by
+clicking the current grammar name in the status bar.
