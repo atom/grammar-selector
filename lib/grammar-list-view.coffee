@@ -25,7 +25,7 @@ class GrammarListView extends SelectListView
   viewForItem: (grammar) ->
     element = document.createElement('li')
     element.classList.add('active') if grammar is @currentGrammar
-    element.textContent = grammar.name
+    element.textContent = grammar.name ? grammar.scopeName
     element
 
   confirmed: (grammar) ->
@@ -51,6 +51,7 @@ class GrammarListView extends SelectListView
       else if grammarB.scopeName is 'text.plain'
         1
       else
-        grammarA.name.localeCompare(grammarB.name)
+        grammarA.name?.localeCompare?(grammarB.name) ? grammarA.scopeName?.localeCompare?(grammarB.name) ? 1
+
     grammars.unshift(@autoDetect)
     grammars

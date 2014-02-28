@@ -29,7 +29,7 @@ class GrammarStatusView extends View
       if grammar is atom.syntax.nullGrammar
         grammarName = 'Plain Text'
       else
-        grammarName = grammar.name
+        grammarName = grammar.name ? grammar.scopeName
       @text(grammarName).show()
     else
       @hide()

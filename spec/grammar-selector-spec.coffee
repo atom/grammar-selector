@@ -1,3 +1,4 @@
+path = require 'path'
 {$, WorkspaceView, View} = require 'atom'
 
 class StatusBarMock extends View
@@ -27,6 +28,9 @@ describe "GrammarSelector", ->
     waitsForPromise ->
       atom.packages.activatePackage('language-javascript')
 
+    waitsForPromise ->
+      atom.packages.activatePackage(path.join(__dirname, 'fixtures', 'language-with-no-name'))
+
     runs ->
       atom.workspaceView.openSync('sample.js')
       editorView = atom.workspaceView.getActiveView()
@@ -45,6 +49,7 @@ describe "GrammarSelector", ->
       {grammars} = atom.syntax
       expect(grammarView.list.children('li').length).toBe grammars.length
       expect(grammarView.list.children('li:first').text()).toBe 'Auto Detect'
+      expect(grammarView.list.children('li:contains(source.a)')).toExist()
       for li in grammarView.list.children('li')
         expect($(li).text()).not.toBe atom.syntax.nullGrammar.name
 
@@ -113,6 +118,10 @@ describe "GrammarSelector", ->
         atom.syntax.setGrammarOverrideForPath(editor.getPath(), 'text.plain')
         editor.reloadGrammar()
         expect(grammarStatus.text()).toBe 'Plain Text'
+
+        atom.syntax.setGrammarOverrideForPath(editor.getPath(), 'source.a')
+        editor.reloadGrammar()
+        expect(grammarStatus.text()).toBe 'source.a'
 
     describe "when clicked", ->
       it "toggles the grammar-selector:show event", ->
