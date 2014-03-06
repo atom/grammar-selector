@@ -79,6 +79,21 @@ describe "GrammarSelector", ->
       grammarView = atom.workspaceView.find('.grammar-selector').view()
       expect(grammarView.list.children('li.active').text()).toBe 'Auto Detect'
 
+  describe "when editor is untitled", ->
+    it "sets the new grammar on the editor", ->
+      waitsForPromise ->
+        atom.workspace.open()
+
+      runs ->
+        editorView = atom.workspaceView.getActiveView()
+        {editor} = editorView
+
+        editorView.trigger 'grammar-selector:show'
+        expect(editor.getGrammar()).not.toBe jsGrammar
+        grammarView = atom.workspaceView.find('.grammar-selector').view()
+        grammarView.confirmed(jsGrammar)
+        expect(editor.getGrammar()).toBe jsGrammar
+
   describe "grammar label", ->
     [grammarStatus] = []
 
