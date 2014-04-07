@@ -3,3 +3,6 @@
 
 '.platform-win32 .editor':
   'ctrl-L': 'grammar-selector:show'
+
+'.platform-linux .editor':
+  'ctrl-L': 'grammar-selector:show'
