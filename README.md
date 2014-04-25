@@ -1,4 +1,4 @@
-# Grammar Selector package
+# Grammar Selector package [![Build Status](https://travis-ci.org/atom/grammar-selector.svg?branch=master)](https://travis-ci.org/atom/grammar-selector)
 
 Pick the grammar used for syntax highlighting using `ctrl-shift-L` or by
 clicking the current grammar name in the status bar.
