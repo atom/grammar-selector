@@ -14,7 +14,7 @@ class GrammarStatusView extends View
       @updateGrammarText()
 
     atom.config.observe 'grammar-selector.right', =>
-      @.attach()
+      @attach()
 
     @subscribe this, 'click', ->
       atom.workspaceView.trigger('grammar-selector:show')
