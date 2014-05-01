@@ -1,6 +1,6 @@
 module.exports =
   configDefaults:
-    right: false
+    showOnRightSideOfStatusBar: false
 
   activate: ->
     atom.workspaceView.command('grammar-selector:show', createGrammarListView)
