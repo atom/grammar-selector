@@ -1,4 +1,7 @@
 module.exports =
+  configDefaults:
+    right: false
+
   activate: ->
     atom.workspaceView.command('grammar-selector:show', createGrammarListView)
     atom.packages.once('activated', createGrammarStatusView)
