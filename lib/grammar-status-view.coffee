@@ -10,8 +10,9 @@ class GrammarStatusView extends View
     @subscribe @statusBar, 'active-buffer-changed', =>
       @updateGrammarText()
 
-    @subscribe atom.workspaceView, 'editor:grammar-changed', =>
-      @updateGrammarText()
+    @subscribe atom.workspace.eachEditor (editor) =>
+      @subscribe editor, 'grammar-changed', =>
+        @updateGrammarText() if editor is atom.workspace.getActiveEditor()
 
     atom.config.observe 'grammar-selector.showOnRightSideOfStatusBar', =>
       @attach()
