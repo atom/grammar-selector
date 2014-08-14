@@ -31,8 +31,11 @@ describe "GrammarSelector", ->
     waitsForPromise ->
       atom.packages.activatePackage(path.join(__dirname, 'fixtures', 'language-with-no-name'))
 
+
+    waitsForPromise ->
+      atom.workspace.open('sample.js')
+
     runs ->
-      atom.workspaceView.openSync('sample.js')
       editorView = atom.workspaceView.getActiveView()
       {editor} = editorView
       textGrammar = atom.syntax.grammarForScopeName('text.plain')
