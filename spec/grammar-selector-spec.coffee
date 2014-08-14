@@ -18,6 +18,7 @@ describe "GrammarSelector", ->
   beforeEach ->
     atom.workspaceView = new WorkspaceView
     atom.workspace = atom.workspaceView.model
+    atom.config.set('grammar-selector.showOnRightSideOfStatusBar', false)
 
     waitsForPromise ->
       atom.packages.activatePackage('grammar-selector')
