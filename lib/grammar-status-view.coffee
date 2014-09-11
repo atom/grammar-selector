@@ -4,7 +4,8 @@
 module.exports =
 class GrammarStatusView extends View
   @content: ->
-    @a href: '#', class: 'inline-block'
+    @div class: 'grammar-status', =>
+      @a href: '#', class: 'inline-block'
 
   initialize: (@statusBar) ->
     @subscribe @statusBar, 'active-buffer-changed', =>
@@ -37,6 +38,9 @@ class GrammarStatusView extends View
         grammarName = 'Plain Text'
       else
         grammarName = grammar.name ? grammar.scopeName
-      @text(grammarName).show()
+      @children()
+        .text(grammarName)
+        .attr('title', grammarName)
+        .show()
     else
       @hide()
