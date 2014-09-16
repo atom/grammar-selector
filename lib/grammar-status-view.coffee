@@ -38,8 +38,7 @@ class GrammarStatusView extends View
         grammarName = 'Plain Text'
       else
         grammarName = grammar.name ? grammar.scopeName
-      @grammarLink
-        .text(grammarName)
-        .attr('title', grammarName)
+      @grammarLink.element.textContent = grammarName
+      @grammarLink.element.dataset.grammar = grammarName
     else
       @hide()
