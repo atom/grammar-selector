@@ -4,7 +4,7 @@
 module.exports =
 class GrammarStatusView extends View
   @content: ->
-    @div class: 'grammar-status', =>
+    @div class: 'grammar-status inline-block', =>
       @a href: '#', class: 'inline-block', outlet: 'grammarLink'
 
   initialize: (@statusBar) ->
