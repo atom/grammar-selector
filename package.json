@@ -1,6 +1,6 @@
 {
   "name": "grammar-selector",
-  "version": "0.30.0",
+  "version": "0.31.0",
   "main": "./lib/main",
   "description": "Select the grammar to use for the current editor with `ctrl-shift-L`.",
   "license": "MIT",
