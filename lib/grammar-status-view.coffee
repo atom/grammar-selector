@@ -40,6 +40,6 @@ class GrammarStatusView extends View
         grammarName = grammar.name ? grammar.scopeName
       @grammarLink.element.textContent = grammarName
       @grammarLink.element.dataset.grammar = grammarName
-      @show()
+      @element.style.display = ''
     else
-      @hide()
+      @element.style.display = 'none'
