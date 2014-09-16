@@ -25,7 +25,9 @@ class GrammarListView extends SelectListView
   viewForItem: (grammar) ->
     element = document.createElement('li')
     element.classList.add('active') if grammar is @currentGrammar
-    element.textContent = grammar.name ? grammar.scopeName
+    grammarName = grammar.name ? grammar.scopeName
+    element.textContent = grammarName
+    element.setAttribute('data-grammar', grammarName)
     element
 
   confirmed: (grammar) ->
