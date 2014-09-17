@@ -1,26 +1,12 @@
-{View} = require 'atom'
-
 # View to show the grammar name in the status bar.
-module.exports =
-class GrammarStatusView extends View
-  @content: ->
-    @div class: 'grammar-status inline-block', =>
-      @a href: '#', class: 'inline-block', outlet: 'grammarLink'
-
+class GrammarStatusView extends HTMLElement
   initialize: (@statusBar) ->
-    @subscribe @statusBar, 'active-buffer-changed', =>
-      @updateGrammarText()
-
-    @subscribe atom.workspace.eachEditor (editor) =>
-      @subscribe editor, 'grammar-changed', =>
-        @updateGrammarText() if editor is atom.workspace.getActiveEditor()
-
-    atom.config.observe 'grammar-selector.showOnRightSideOfStatusBar', =>
-      @attach()
-
-    @subscribe this, 'click', ->
-      atom.workspaceView.trigger('grammar-selector:show')
-      false
+    @classList.add('grammar-status', 'inline-block')
+    @grammarLink = document.createElement('a')
+    @grammarLink.classList.add('inline-block')
+    @grammarLink.href = '#'
+    @appendChild(@grammarLink)
+    @handleEvents()
 
   attach: ->
     if atom.config.get 'grammar-selector.showOnRightSideOfStatusBar'
@@ -28,18 +14,47 @@ class GrammarStatusView extends View
     else
       @statusBar.appendLeft(this)
 
-  afterAttach: ->
+  handleEvents: ->
+    @activeItemSubscription = atom.workspace.onDidChangeActivePaneItem =>
+      @subscribeToActiveTextEditor()
+
+    @configSubscription = atom.config.observe 'grammar-selector.showOnRightSideOfStatusBar', =>
+      @attach()
+
+    clickHandler = ->
+      atom.workspaceView.trigger('grammar-selector:show')
+      false
+    @addEventListener('click', clickHandler)
+    @clickSubscription = dispose: => @removeEventListener('click', clickHandler)
+
+    @subscribeToActiveTextEditor()
+
+  destroy: ->
+    @activeItemSubscription.dispose()
+    @grammarSubscription.dispose()
+    @clickSubscription.dispose()
+    @configSubscription.off()
+
+  getActiveTextEditor: ->
+    atom.workspace.getActiveTextEditor()
+
+  subscribeToActiveTextEditor: ->
+    @grammarSubscription?.dispose()
+    @grammarSubscription = @getActiveTextEditor()?.onDidChangeGrammar =>
+      @updateGrammarText()
     @updateGrammarText()
 
   updateGrammarText: ->
-    grammar = atom.workspace.getActiveEditor()?.getGrammar?()
+    grammar = @getActiveTextEditor()?.getGrammar?()
     if grammar?
       if grammar is atom.syntax.nullGrammar
         grammarName = 'Plain Text'
       else
         grammarName = grammar.name ? grammar.scopeName
-      @grammarLink.element.textContent = grammarName
-      @grammarLink.element.dataset.grammar = grammarName
-      @element.style.display = ''
+      @grammarLink.textContent = grammarName
+      @grammarLink.dataset.grammar = grammarName
+      @style.display = ''
     else
-      @element.style.display = 'none'
+      @style.display = 'none'
+
+module.exports = document.registerElement('grammar-selector-status', prototype: GrammarStatusView.prototype, extends: 'div')

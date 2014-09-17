@@ -106,7 +106,7 @@ describe "GrammarSelector", ->
       atom.workspaceView.statusBar.attach()
       atom.packages.emit('activated')
 
-      grammarStatus = atom.workspaceView.statusBar.leftPanel.children().view()
+      grammarStatus = atom.workspaceView.statusBar.leftPanel.children()[0]
       expect(grammarStatus).toExist()
 
     afterEach ->
@@ -114,16 +114,16 @@ describe "GrammarSelector", ->
       atom.workspaceView.statusBar = null
 
     it "displays the name of the current grammar", ->
-      expect(grammarStatus.text()).toBe 'JavaScript'
+      expect(grammarStatus.grammarLink.textContent).toBe 'JavaScript'
 
     it "displays Plain Text when the current grammar is the null grammar", ->
       atom.workspaceView.attachToDom()
       editor.setGrammar(atom.syntax.nullGrammar)
       expect(grammarStatus).toBeVisible()
-      expect(grammarStatus.text()).toBe 'Plain Text'
+      expect(grammarStatus.grammarLink.textContent).toBe 'Plain Text'
       editor.reloadGrammar()
       expect(grammarStatus).toBeVisible()
-      expect(grammarStatus.text()).toBe 'JavaScript'
+      expect(grammarStatus.grammarLink.textContent).toBe 'JavaScript'
 
     it "hides the label when the current grammar is null", ->
       atom.workspaceView.attachToDom()
@@ -136,11 +136,11 @@ describe "GrammarSelector", ->
       it "displays the new grammar of the editor", ->
         atom.syntax.setGrammarOverrideForPath(editor.getPath(), 'text.plain')
         editor.reloadGrammar()
-        expect(grammarStatus.text()).toBe 'Plain Text'
+        expect(grammarStatus.grammarLink.textContent).toBe 'Plain Text'
 
         atom.syntax.setGrammarOverrideForPath(editor.getPath(), 'source.a')
         editor.reloadGrammar()
-        expect(grammarStatus.text()).toBe 'source.a'
+        expect(grammarStatus.grammarLink.textContent).toBe 'source.a'
 
     describe "when clicked", ->
       it "toggles the grammar-selector:show event", ->
