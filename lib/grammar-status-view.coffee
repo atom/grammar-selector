@@ -34,6 +34,7 @@ class GrammarStatusView extends HTMLElement
     @grammarSubscription.dispose()
     @clickSubscription.dispose()
     @configSubscription.off()
+    @remove()
 
   getActiveTextEditor: ->
     atom.workspace.getActiveTextEditor()

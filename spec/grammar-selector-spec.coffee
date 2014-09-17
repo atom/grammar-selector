@@ -148,3 +148,9 @@ describe "GrammarSelector", ->
         atom.workspaceView.on 'grammar-selector:show', eventHandler
         grammarStatus.click()
         expect(eventHandler).toHaveBeenCalled()
+
+    describe "when the package is deactivated", ->
+      it "removes the view", ->
+        atom.packages.deactivatePackage('grammar-selector')
+
+        expect(grammarStatus.parentElement).toBeNull()

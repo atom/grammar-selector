@@ -1,3 +1,5 @@
+grammarStatusView = null
+
 module.exports =
   configDefaults:
     showOnRightSideOfStatusBar: true
@@ -5,6 +7,9 @@ module.exports =
   activate: ->
     atom.workspaceView.command('grammar-selector:show', createGrammarListView)
     atom.packages.once('activated', createGrammarStatusView)
+
+  deactivate: ->
+    grammarStatusView?.destroy()
 
 createGrammarListView = ->
   editor = atom.workspace.getActiveEditor()
@@ -17,6 +22,6 @@ createGrammarStatusView = ->
   {statusBar} = atom.workspaceView
   if statusBar?
     GrammarStatusView = require './grammar-status-view'
-    view = new GrammarStatusView()
-    view.initialize(statusBar)
-    view.attach()
+    grammarStatusView = new GrammarStatusView()
+    grammarStatusView.initialize(statusBar)
+    grammarStatusView.attach()
