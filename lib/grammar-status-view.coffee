@@ -30,10 +30,10 @@ class GrammarStatusView extends HTMLElement
     @subscribeToActiveTextEditor()
 
   destroy: ->
-    @activeItemSubscription.dispose()
-    @grammarSubscription.dispose()
-    @clickSubscription.dispose()
-    @configSubscription.off()
+    @activeItemSubscription?.dispose()
+    @grammarSubscription?.dispose()
+    @clickSubscription?.dispose()
+    @configSubscription?.off()
     @remove()
 
   getActiveTextEditor: ->
