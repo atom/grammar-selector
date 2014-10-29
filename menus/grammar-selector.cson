@@ -5,3 +5,9 @@
     'command': 'grammar-selector:show'
   ]
 ]
+
+'context-menu':
+  '.overlayer': [
+    'label': 'Change Grammar'
+    'command': 'grammar-selector:show'
+  ]
