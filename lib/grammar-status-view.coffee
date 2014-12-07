@@ -7,12 +7,15 @@ class GrammarStatusView extends HTMLElement
     @grammarLink.href = '#'
     @appendChild(@grammarLink)
     @handleEvents()
+    this
 
   attach: ->
-    if atom.config.get 'grammar-selector.showOnRightSideOfStatusBar'
-      @statusBar.prependRight(this)
-    else
-      @statusBar.appendLeft(this)
+    @statusBarTile?.destroy()
+    @statusBarTile =
+      if atom.config.get 'grammar-selector.showOnRightSideOfStatusBar'
+        @statusBar.addRightTile(item: this)
+      else
+        @statusBar.addLeftTile(item: this)
 
   handleEvents: ->
     @activeItemSubscription = atom.workspace.onDidChangeActivePaneItem =>
@@ -34,7 +37,7 @@ class GrammarStatusView extends HTMLElement
     @grammarSubscription?.dispose()
     @clickSubscription?.dispose()
     @configSubscription?.off()
-    @remove()
+    @statusBarTile.destroy()
 
   getActiveTextEditor: ->
     atom.workspace.getActiveTextEditor()

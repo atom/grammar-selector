@@ -6,7 +6,11 @@ module.exports =
 
   activate: ->
     atom.workspaceView.command('grammar-selector:show', createGrammarListView)
-    atom.packages.once('activated', createGrammarStatusView)
+
+    atom.services.consume "status-bar", "^0.50.0", (statusBar) ->
+      GrammarStatusView = require './grammar-status-view'
+      grammarStatusView = new GrammarStatusView().initialize(statusBar)
+      grammarStatusView.attach()
 
   deactivate: ->
     grammarStatusView?.destroy()
@@ -17,11 +21,3 @@ createGrammarListView = ->
     GrammarListView = require './grammar-list-view'
     view = new GrammarListView(editor)
     view.attach()
-
-createGrammarStatusView = ->
-  {statusBar} = atom.workspaceView
-  if statusBar?
-    GrammarStatusView = require './grammar-status-view'
-    grammarStatusView = new GrammarStatusView()
-    grammarStatusView.initialize(statusBar)
-    grammarStatusView.attach()
