@@ -1,16 +1,6 @@
 path = require 'path'
-{$, WorkspaceView, View} = require 'atom'
-
-class StatusBarMock extends View
-  @content: ->
-    @div class: 'status-bar tool-panel panel-bottom', =>
-      @div outlet: 'leftPanel', class: 'status-bar-left'
-
-  attach: ->
-    atom.workspaceView.appendToTop(this)
-
-  appendLeft: (item) ->
-    @leftPanel.append(item)
+{last, invoke} = require 'underscore-plus'
+{$, Disposable, WorkspaceView, View} = require 'atom'
 
 describe "GrammarSelector", ->
   [editor, editorView, textGrammar, jsGrammar] =  []
@@ -19,6 +9,9 @@ describe "GrammarSelector", ->
     atom.workspaceView = new WorkspaceView
     atom.workspace = atom.workspaceView.model
     atom.config.set('grammar-selector.showOnRightSideOfStatusBar', false)
+
+    waitsForPromise ->
+      atom.packages.activatePackage('status-bar')
 
     waitsForPromise ->
       atom.packages.activatePackage('grammar-selector')
@@ -31,7 +24,6 @@ describe "GrammarSelector", ->
 
     waitsForPromise ->
       atom.packages.activatePackage(path.join(__dirname, 'fixtures', 'language-with-no-name'))
-
 
     waitsForPromise ->
       atom.workspace.open('sample.js')
@@ -99,19 +91,38 @@ describe "GrammarSelector", ->
         expect(editor.getGrammar()).toBe jsGrammar
 
   describe "grammar label", ->
-    [grammarStatus] = []
+    [grammarStatus, grammarTile] = []
 
     beforeEach ->
-      atom.workspaceView.statusBar = new StatusBarMock()
-      atom.workspaceView.statusBar.attach()
-      atom.packages.emit('activated')
+      waitsFor (done) ->
+        atom.services.consume "status-bar", "0.50.0", (statusBar) ->
+          grammarTile = last(statusBar.getLeftTiles())
+          grammarStatus = grammarTile.getItem()
+          jasmine.attachToDOM(grammarStatus)
+          done()
 
-      grammarStatus = atom.workspaceView.statusBar.leftPanel.children()[0]
-      expect(grammarStatus).toExist()
+    describe "when the grammar-selector.showOnRightSideOfStatusBar setting changes", ->
+      it "moves the item to the preferred side of the status bar", ->
+        statusBar = null
 
-    afterEach ->
-      atom.workspaceView.statusBar.remove()
-      atom.workspaceView.statusBar = null
+        waitsFor (done) ->
+          atom.services.consume "status-bar", "0.50.0", (bar) ->
+            statusBar = bar
+            done()
+
+        runs ->
+          expect(invoke(statusBar.getLeftTiles(), 'getItem')).toContain(grammarStatus)
+          expect(invoke(statusBar.getRightTiles(), 'getItem')).not.toContain(grammarStatus)
+
+          atom.config.set("grammar-selector.showOnRightSideOfStatusBar", true)
+
+          expect(invoke(statusBar.getLeftTiles(), 'getItem')).not.toContain(grammarStatus)
+          expect(invoke(statusBar.getRightTiles(), 'getItem')).toContain(grammarStatus)
+
+          atom.config.set("grammar-selector.showOnRightSideOfStatusBar", false)
+
+          expect(invoke(statusBar.getLeftTiles(), 'getItem')).toContain(grammarStatus)
+          expect(invoke(statusBar.getRightTiles(), 'getItem')).not.toContain(grammarStatus)
 
     it "displays the name of the current grammar", ->
       expect(grammarStatus.grammarLink.textContent).toBe 'JavaScript'
@@ -129,7 +140,6 @@ describe "GrammarSelector", ->
       atom.workspaceView.attachToDom()
       spyOn(editor, 'getGrammar').andReturn null
       editor.setGrammar(atom.syntax.nullGrammar)
-
       expect(grammarStatus).toBeHidden()
 
     describe "when the editor's grammar changes", ->
@@ -151,6 +161,6 @@ describe "GrammarSelector", ->
 
     describe "when the package is deactivated", ->
       it "removes the view", ->
+        spyOn(grammarTile, 'destroy')
         atom.packages.deactivatePackage('grammar-selector')
-
-        expect(grammarStatus.parentElement).toBeNull()
+        expect(grammarTile.destroy).toHaveBeenCalled()
