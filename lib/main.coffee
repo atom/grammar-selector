@@ -19,9 +19,8 @@ createGrammarListView = ->
     view.attach()
 
 createGrammarStatusView = ->
-  {statusBar} = atom.workspaceView
+  statusBar = atom.views.getView(atom.workspace).querySelector("status-bar")
   if statusBar?
     GrammarStatusView = require './grammar-status-view'
-    grammarStatusView = new GrammarStatusView()
-    grammarStatusView.initialize(statusBar)
+    grammarStatusView = new GrammarStatusView().initialize(statusBar)
     grammarStatusView.attach()
