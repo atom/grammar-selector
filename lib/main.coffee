@@ -5,10 +5,11 @@ module.exports =
     showOnRightSideOfStatusBar: true
 
   activate: ->
-    atom.workspaceView.command('grammar-selector:show', createGrammarListView)
+    @commandDisposable = atom.commands.add 'atom-workspace', 'grammar-selector:show', createGrammarListView
     atom.packages.once('activated', createGrammarStatusView)
 
   deactivate: ->
+    @commandDisposable.dispose()
     grammarStatusView?.destroy()
 
 createGrammarListView = ->

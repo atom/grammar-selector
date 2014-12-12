@@ -1,13 +1,12 @@
 path = require 'path'
 {last, invoke} = require 'underscore-plus'
-{$, Disposable, WorkspaceView, View} = require 'atom'
+{$, Disposable, View} = require 'atom'
 
 describe "GrammarSelector", ->
-  [editor, editorView, textGrammar, jsGrammar] =  []
+  [editor, editorView, workspaceElement, textGrammar, jsGrammar] =  []
 
   beforeEach ->
-    atom.workspaceView = new WorkspaceView
-    atom.workspace = atom.workspaceView.model
+    workspaceElement = atom.views.getView(atom.workspace)
     atom.config.set('grammar-selector.showOnRightSideOfStatusBar', false)
 
     waitsForPromise ->
@@ -29,8 +28,8 @@ describe "GrammarSelector", ->
       atom.workspace.open('sample.js')
 
     runs ->
-      editorView = atom.workspaceView.getActiveView()
-      {editor} = editorView
+      editor = atom.workspace.getActiveTextEditor()
+      editorView = atom.views.getView(editor).__spacePenView
       textGrammar = atom.syntax.grammarForScopeName('text.plain')
       expect(textGrammar).toBeTruthy()
       jsGrammar = atom.syntax.grammarForScopeName('source.js')
@@ -79,8 +78,8 @@ describe "GrammarSelector", ->
         atom.workspace.open()
 
       runs ->
-        editorView = atom.workspaceView.getActiveView()
-        {editor} = editorView
+        editor = atom.workspace.getActiveTextEditor()
+        editorView = atom.views.getView(editor).__spacePenView
 
         editorView.trigger 'grammar-selector:show'
         expect(editor.getGrammar()).not.toBe jsGrammar
@@ -93,7 +92,7 @@ describe "GrammarSelector", ->
 
     beforeEach ->
       atom.packages.emit('activated')
-      statusBar = atom.views.getView(atom.workspace).querySelector("status-bar")
+      statusBar = workspaceElement.querySelector("status-bar")
       grammarTile = last(statusBar.getLeftTiles())
       grammarStatus = grammarTile.getItem()
       jasmine.attachToDOM(grammarStatus)
@@ -141,9 +140,9 @@ describe "GrammarSelector", ->
         expect(grammarStatus.grammarLink.textContent).toBe 'source.a'
 
     describe "when clicked", ->
-      it "toggles the grammar-selector:show event", ->
+      it "shows the grammar selector modal", ->
         eventHandler = jasmine.createSpy('eventHandler')
-        atom.workspaceView.on 'grammar-selector:show', eventHandler
+        atom.commands.add(grammarStatus, 'grammar-selector:show', eventHandler)
         grammarStatus.click()
         expect(eventHandler).toHaveBeenCalled()
 

@@ -1,3 +1,5 @@
+{Disposable} = require 'atom'
+
 # View to show the grammar name in the status bar.
 class GrammarStatusView extends HTMLElement
   initialize: (@statusBar) ->
@@ -24,11 +26,9 @@ class GrammarStatusView extends HTMLElement
     @configSubscription = atom.config.observe 'grammar-selector.showOnRightSideOfStatusBar', =>
       @attach()
 
-    clickHandler = ->
-      atom.workspaceView.trigger('grammar-selector:show')
-      false
+    clickHandler = -> atom.commands.dispatch(this, 'grammar-selector:show')
     @addEventListener('click', clickHandler)
-    @clickSubscription = dispose: => @removeEventListener('click', clickHandler)
+    @clickSubscription = new Disposable => @removeEventListener('click', clickHandler)
 
     @subscribeToActiveTextEditor()
 
