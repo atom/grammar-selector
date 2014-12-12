@@ -1,8 +1,10 @@
 grammarStatusView = null
 
 module.exports =
-  configDefaults:
-    showOnRightSideOfStatusBar: true
+  config:
+    showOnRightSideOfStatusBar:
+      type: 'boolean'
+      default: true
 
   activate: ->
     @commandDisposable = atom.commands.add 'atom-workspace', 'grammar-selector:show', createGrammarListView
