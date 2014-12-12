@@ -6,7 +6,7 @@ class GrammarListView extends SelectListView
   initialize: (@editor) ->
     super
 
-    @addClass('grammar-selector from-top overlay')
+    @addClass('grammar-selector')
     @list.addClass('mark-active')
 
     @autoDetect = name: 'Auto Detect'
@@ -30,6 +30,10 @@ class GrammarListView extends SelectListView
     element.dataset.grammar = grammarName
     element
 
+  cancelled: ->
+    @panel?.destroy()
+    @panel = null
+
   confirmed: (grammar) ->
     @cancel()
     if grammar is @autoDetect
@@ -41,7 +45,7 @@ class GrammarListView extends SelectListView
 
   attach: ->
     @storeFocusedElement()
-    atom.workspaceView.append(this)
+    @panel ?= atom.workspace.addModalPanel(item: this)
     @focusFilterEditor()
 
   getGrammars: ->
