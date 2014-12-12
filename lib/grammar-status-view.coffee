@@ -51,7 +51,7 @@ class GrammarStatusView extends HTMLElement
   updateGrammarText: ->
     grammar = @getActiveTextEditor()?.getGrammar?()
     if grammar?
-      if grammar is atom.syntax.nullGrammar
+      if grammar is atom.grammars.nullGrammar
         grammarName = 'Plain Text'
       else
         grammarName = grammar.name ? grammar.scopeName

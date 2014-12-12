@@ -11,7 +11,7 @@ class GrammarListView extends SelectListView
 
     @autoDetect = name: 'Auto Detect'
     @currentGrammar = @editor.getGrammar()
-    @currentGrammar = @autoDetect if @currentGrammar is atom.syntax.nullGrammar
+    @currentGrammar = @autoDetect if @currentGrammar is atom.grammars.nullGrammar
 
     @subscribe this, 'grammar-selector:show', =>
       @cancel()
@@ -37,10 +37,10 @@ class GrammarListView extends SelectListView
   confirmed: (grammar) ->
     @cancel()
     if grammar is @autoDetect
-      atom.syntax.clearGrammarOverrideForPath(@editor.getPath())
+      atom.grammars.clearGrammarOverrideForPath(@editor.getPath())
       @editor.reloadGrammar()
     else
-      atom.syntax.setGrammarOverrideForPath(@editor.getPath(), grammar.scopeName)
+      atom.grammars.setGrammarOverrideForPath(@editor.getPath(), grammar.scopeName)
       @editor.setGrammar(grammar)
 
   attach: ->
@@ -49,8 +49,8 @@ class GrammarListView extends SelectListView
     @focusFilterEditor()
 
   getGrammars: ->
-    grammars = atom.syntax.getGrammars().filter (grammar) ->
-      grammar isnt atom.syntax.nullGrammar
+    grammars = atom.grammars.getGrammars().filter (grammar) ->
+      grammar isnt atom.grammars.nullGrammar
 
     grammars.sort (grammarA, grammarB) ->
       if grammarA.scopeName is 'text.plain'
