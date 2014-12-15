@@ -8,7 +8,7 @@ module.exports =
 
   activate: ->
     @commandDisposable = atom.commands.add 'atom-workspace', 'grammar-selector:show', createGrammarListView
-    atom.packages.once('activated', createGrammarStatusView)
+    atom.packages.onDidActivateAll(createGrammarStatusView)
 
   deactivate: ->
     @commandDisposable.dispose()

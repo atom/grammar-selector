@@ -91,7 +91,7 @@ describe "GrammarSelector", ->
     [grammarStatus, grammarTile, statusBar] = []
 
     beforeEach ->
-      atom.packages.emit('activated')
+      atom.packages.emitter.emit('did-activate-all')
       statusBar = workspaceElement.querySelector("status-bar")
       grammarTile = last(statusBar.getLeftTiles())
       grammarStatus = grammarTile.getItem()
