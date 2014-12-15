@@ -1,5 +1,7 @@
+{Disposable} = require 'atom'
+
 # View to show the grammar name in the status bar.
-class GrammarStatusView extends HTMLElement
+class GrammarStatusView extends HTMLDivElement
   initialize: (@statusBar) ->
     @classList.add('grammar-status', 'inline-block')
     @grammarLink = document.createElement('a')
@@ -7,12 +9,15 @@ class GrammarStatusView extends HTMLElement
     @grammarLink.href = '#'
     @appendChild(@grammarLink)
     @handleEvents()
+    this
 
   attach: ->
-    if atom.config.get 'grammar-selector.showOnRightSideOfStatusBar'
-      @statusBar.prependRight(this)
-    else
-      @statusBar.appendLeft(this)
+    @statusBarTile?.destroy()
+    @statusBarTile =
+      if atom.config.get 'grammar-selector.showOnRightSideOfStatusBar'
+        @statusBar.addRightTile(item: this, priority: 10)
+      else
+        @statusBar.addLeftTile(item: this, priority: 10)
 
   handleEvents: ->
     @activeItemSubscription = atom.workspace.onDidChangeActivePaneItem =>
@@ -21,11 +26,9 @@ class GrammarStatusView extends HTMLElement
     @configSubscription = atom.config.observe 'grammar-selector.showOnRightSideOfStatusBar', =>
       @attach()
 
-    clickHandler = ->
-      atom.workspaceView.trigger('grammar-selector:show')
-      false
+    clickHandler = -> atom.commands.dispatch(this, 'grammar-selector:show')
     @addEventListener('click', clickHandler)
-    @clickSubscription = dispose: => @removeEventListener('click', clickHandler)
+    @clickSubscription = new Disposable => @removeEventListener('click', clickHandler)
 
     @subscribeToActiveTextEditor()
 
@@ -33,8 +36,8 @@ class GrammarStatusView extends HTMLElement
     @activeItemSubscription?.dispose()
     @grammarSubscription?.dispose()
     @clickSubscription?.dispose()
-    @configSubscription?.off()
-    @remove()
+    @configSubscription?.dispose()
+    @statusBarTile.destroy()
 
   getActiveTextEditor: ->
     atom.workspace.getActiveTextEditor()
@@ -48,7 +51,7 @@ class GrammarStatusView extends HTMLElement
   updateGrammarText: ->
     grammar = @getActiveTextEditor()?.getGrammar?()
     if grammar?
-      if grammar is atom.syntax.nullGrammar
+      if grammar is atom.grammars.nullGrammar
         grammarName = 'Plain Text'
       else
         grammarName = grammar.name ? grammar.scopeName
@@ -58,4 +61,4 @@ class GrammarStatusView extends HTMLElement
     else
       @style.display = 'none'
 
-module.exports = document.registerElement('grammar-selector-status', prototype: GrammarStatusView.prototype, extends: 'div')
+module.exports = document.registerElement('grammar-selector-status', prototype: GrammarStatusView.prototype)

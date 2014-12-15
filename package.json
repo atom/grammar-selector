@@ -7,5 +7,9 @@
   "repository": "https://github.com/atom/grammar-selector",
   "engines": {
     "atom": "*"
+  },
+  "dependencies": {
+    "atom-space-pen-views": "^0.20.0",
+    "underscore-plus": "^1.6.2"
   }
 }

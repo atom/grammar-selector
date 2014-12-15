@@ -1,26 +1,20 @@
-{SelectListView} = require 'atom'
+{SelectListView} = require 'atom-space-pen-views'
 
 # View to display a list of grammars to apply to the current editor.
 module.exports =
 class GrammarListView extends SelectListView
-  initialize: (@editor) ->
+  initialize: ->
     super
 
-    @addClass('grammar-selector from-top overlay')
+    @addClass('grammar-selector')
     @list.addClass('mark-active')
-
     @autoDetect = name: 'Auto Detect'
-    @currentGrammar = @editor.getGrammar()
-    @currentGrammar = @autoDetect if @currentGrammar is atom.syntax.nullGrammar
-
-    @subscribe this, 'grammar-selector:show', =>
-      @cancel()
-      false
-
-    @setItems(@getGrammars())
 
   getFilterKey: ->
     'name'
+
+  destroy: ->
+    @cancel()
 
   viewForItem: (grammar) ->
     element = document.createElement('li')
@@ -30,23 +24,38 @@ class GrammarListView extends SelectListView
     element.dataset.grammar = grammarName
     element
 
+  cancelled: ->
+    @panel?.destroy()
+    @panel = null
+    @editor = null
+    @currentGrammar = null
+
   confirmed: (grammar) ->
-    @cancel()
     if grammar is @autoDetect
-      atom.syntax.clearGrammarOverrideForPath(@editor.getPath())
+      atom.grammars.clearGrammarOverrideForPath(@editor.getPath())
       @editor.reloadGrammar()
     else
-      atom.syntax.setGrammarOverrideForPath(@editor.getPath(), grammar.scopeName)
+      atom.grammars.setGrammarOverrideForPath(@editor.getPath(), grammar.scopeName)
       @editor.setGrammar(grammar)
+    @cancel()
 
   attach: ->
     @storeFocusedElement()
-    atom.workspaceView.append(this)
+    @panel ?= atom.workspace.addModalPanel(item: this)
     @focusFilterEditor()
 
+  toggle: ->
+    if @panel?
+      @cancel()
+    else if @editor = atom.workspace.getActiveTextEditor()
+      @currentGrammar = @editor.getGrammar()
+      @currentGrammar = @autoDetect if @currentGrammar is atom.grammars.nullGrammar
+      @setItems(@getGrammars())
+      @attach()
+
   getGrammars: ->
-    grammars = atom.syntax.getGrammars().filter (grammar) ->
-      grammar isnt atom.syntax.nullGrammar
+    grammars = atom.grammars.getGrammars().filter (grammar) ->
+      grammar isnt atom.grammars.nullGrammar
 
     grammars.sort (grammarA, grammarB) ->
       if grammarA.scopeName is 'text.plain'
