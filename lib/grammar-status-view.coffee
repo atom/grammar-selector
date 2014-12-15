@@ -36,7 +36,7 @@ class GrammarStatusView extends HTMLElement
     @activeItemSubscription?.dispose()
     @grammarSubscription?.dispose()
     @clickSubscription?.dispose()
-    @configSubscription?.off()
+    @configSubscription?.dispose()
     @statusBarTile.destroy()
 
   getActiveTextEditor: ->
