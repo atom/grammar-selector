@@ -1,4 +1,4 @@
-{SelectListView} = require 'atom'
+{SelectListView} = require 'atom-space-pen-views'
 
 # View to display a list of grammars to apply to the current editor.
 module.exports =

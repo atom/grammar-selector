@@ -1,6 +1,6 @@
 path = require 'path'
 {last, invoke} = require 'underscore-plus'
-{$, Disposable, View} = require 'atom'
+{$} = require 'atom-space-pen-views'
 
 describe "GrammarSelector", ->
   [editor, editorView, workspaceElement, textGrammar, jsGrammar] =  []
