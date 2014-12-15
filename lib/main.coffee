@@ -1,3 +1,4 @@
+grammarListView = null
 grammarStatusView = null
 
 module.exports =
@@ -7,19 +8,22 @@ module.exports =
       default: true
 
   activate: ->
-    @commandDisposable = atom.commands.add 'atom-workspace', 'grammar-selector:show', createGrammarListView
+    @commandDisposable = atom.commands.add('atom-text-editor', 'grammar-selector:show', createGrammarListView)
     atom.packages.onDidActivateAll(createGrammarStatusView)
 
   deactivate: ->
     @commandDisposable.dispose()
     grammarStatusView?.destroy()
+    grammarStatusView = null
+    grammarListView?.destroy()
+    grammarListView = null
 
 createGrammarListView = ->
   editor = atom.workspace.getActiveTextEditor()
   if editor?
     GrammarListView = require './grammar-list-view'
-    view = new GrammarListView(editor)
-    view.attach()
+    grammarListView ?= new GrammarListView(editor)
+  grammarListView.attach()
 
 createGrammarStatusView = ->
   statusBar = atom.views.getView(atom.workspace).querySelector("status-bar")

@@ -12,15 +12,13 @@ class GrammarListView extends SelectListView
     @autoDetect = name: 'Auto Detect'
     @currentGrammar = @editor.getGrammar()
     @currentGrammar = @autoDetect if @currentGrammar is atom.grammars.nullGrammar
-
-    @subscribe this, 'grammar-selector:show', =>
-      @cancel()
-      false
-
     @setItems(@getGrammars())
 
   getFilterKey: ->
     'name'
+
+  destroy: ->
+    @cancel()
 
   viewForItem: (grammar) ->
     element = document.createElement('li')
@@ -47,6 +45,12 @@ class GrammarListView extends SelectListView
     @storeFocusedElement()
     @panel ?= atom.workspace.addModalPanel(item: this)
     @focusFilterEditor()
+
+  toggle: ->
+    if @panel
+      @cancel()
+    else
+      @attach()
 
   getGrammars: ->
     grammars = atom.grammars.getGrammars().filter (grammar) ->

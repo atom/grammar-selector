@@ -29,7 +29,7 @@ describe "GrammarSelector", ->
 
     runs ->
       editor = atom.workspace.getActiveTextEditor()
-      editorView = atom.views.getView(editor).__spacePenView
+      editorView = atom.views.getView(editor)
       textGrammar = atom.grammars.grammarForScopeName('text.plain')
       expect(textGrammar).toBeTruthy()
       jsGrammar = atom.grammars.grammarForScopeName('source.js')
@@ -38,7 +38,7 @@ describe "GrammarSelector", ->
 
   describe "when grammar-selector:show is triggered", ->
     it "displays a list of all the available grammars", ->
-      editorView.trigger 'grammar-selector:show'
+      atom.commands.dispatch(editorView, 'grammar-selector:show')
       grammarView = atom.workspace.getModalPanels()[0].getItem()
       expect(grammarView.list.children('li').length).toBe atom.grammars.grammars.length
       expect(grammarView.list.children('li:first').text()).toBe 'Auto Detect'
@@ -48,19 +48,19 @@ describe "GrammarSelector", ->
 
   describe "when a grammar is selected", ->
     it "sets the new grammar on the editor", ->
-      editorView.trigger 'grammar-selector:show'
+      atom.commands.dispatch(editorView, 'grammar-selector:show')
       grammarView = atom.workspace.getModalPanels()[0].getItem()
       grammarView.confirmed(textGrammar)
       expect(editor.getGrammar()).toBe textGrammar
 
   describe "when auto-detect is selected", ->
     it "restores the auto-detected grammar on the editor", ->
-      editorView.trigger 'grammar-selector:show'
+      atom.commands.dispatch(editorView, 'grammar-selector:show')
       grammarView = atom.workspace.getModalPanels()[0].getItem()
       grammarView.confirmed(textGrammar)
       expect(editor.getGrammar()).toBe textGrammar
 
-      editorView.trigger 'grammar-selector:show'
+      atom.commands.dispatch(editorView, 'grammar-selector:show')
       grammarView = atom.workspace.getModalPanels()[0].getItem()
       grammarView.confirmed(grammarView.items[0])
       expect(editor.getGrammar()).toBe jsGrammar
@@ -68,7 +68,7 @@ describe "GrammarSelector", ->
   describe "when the editor's current grammar is the null grammar", ->
     it "displays Auto Detect as the selected grammar", ->
       editor.setGrammar(atom.grammars.nullGrammar)
-      editorView.trigger 'grammar-selector:show'
+      atom.commands.dispatch(editorView, 'grammar-selector:show')
       grammarView = atom.workspace.getModalPanels()[0].getItem()
       expect(grammarView.list.children('li.active').text()).toBe 'Auto Detect'
 
@@ -79,9 +79,9 @@ describe "GrammarSelector", ->
 
       runs ->
         editor = atom.workspace.getActiveTextEditor()
-        editorView = atom.views.getView(editor).__spacePenView
+        editorView = atom.views.getView(editor)
 
-        editorView.trigger 'grammar-selector:show'
+        atom.commands.dispatch(editorView, 'grammar-selector:show')
         expect(editor.getGrammar()).not.toBe jsGrammar
         grammarView = atom.workspace.getModalPanels()[0].getItem()
         grammarView.confirmed(jsGrammar)
@@ -109,7 +109,7 @@ describe "GrammarSelector", ->
       expect(grammarStatus.grammarLink.textContent).toBe 'JavaScript'
 
     it "hides the label when the current grammar is null", ->
-      editorView.attachToDom()
+      jasmine.attachToDOM(editorView)
       spyOn(editor, 'getGrammar').andReturn null
       editor.setGrammar(atom.grammars.nullGrammar)
       expect(grammarStatus).toBeHidden()
