@@ -3,16 +3,12 @@
 # View to display a list of grammars to apply to the current editor.
 module.exports =
 class GrammarListView extends SelectListView
-  initialize: (@editor) ->
+  initialize: ->
     super
 
     @addClass('grammar-selector')
     @list.addClass('mark-active')
-
     @autoDetect = name: 'Auto Detect'
-    @currentGrammar = @editor.getGrammar()
-    @currentGrammar = @autoDetect if @currentGrammar is atom.grammars.nullGrammar
-    @setItems(@getGrammars())
 
   getFilterKey: ->
     'name'
@@ -49,7 +45,10 @@ class GrammarListView extends SelectListView
   toggle: ->
     if @panel
       @cancel()
-    else
+    else if @editor = atom.workspace.getActiveTextEditor()
+      @currentGrammar = @editor.getGrammar()
+      @currentGrammar = @autoDetect if @currentGrammar is atom.grammars.nullGrammar
+      @setItems(@getGrammars())
       @attach()
 
   getGrammars: ->
