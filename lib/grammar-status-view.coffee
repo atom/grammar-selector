@@ -1,7 +1,7 @@
 {Disposable} = require 'atom'
 
 # View to show the grammar name in the status bar.
-class GrammarStatusView extends HTMLElement
+class GrammarStatusView extends HTMLDivElement
   initialize: (@statusBar) ->
     @classList.add('grammar-status', 'inline-block')
     @grammarLink = document.createElement('a')
@@ -61,4 +61,4 @@ class GrammarStatusView extends HTMLElement
     else
       @style.display = 'none'
 
-module.exports = document.registerElement('grammar-selector-status', prototype: GrammarStatusView.prototype, extends: 'div')
+module.exports = document.registerElement('grammar-selector-status', prototype: GrammarStatusView.prototype)
