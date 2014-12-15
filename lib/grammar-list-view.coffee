@@ -45,7 +45,7 @@ class GrammarListView extends SelectListView
     @focusFilterEditor()
 
   toggle: ->
-    if @panel
+    if @panel?
       @cancel()
     else if @editor = atom.workspace.getActiveTextEditor()
       @currentGrammar = @editor.getGrammar()
