@@ -27,15 +27,17 @@ class GrammarListView extends SelectListView
   cancelled: ->
     @panel?.destroy()
     @panel = null
+    @editor = null
+    @currentGrammar = null
 
   confirmed: (grammar) ->
-    @cancel()
     if grammar is @autoDetect
       atom.grammars.clearGrammarOverrideForPath(@editor.getPath())
       @editor.reloadGrammar()
     else
       atom.grammars.setGrammarOverrideForPath(@editor.getPath(), grammar.scopeName)
       @editor.setGrammar(grammar)
+    @cancel()
 
   attach: ->
     @storeFocusedElement()
