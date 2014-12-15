@@ -15,7 +15,7 @@ module.exports =
     grammarStatusView?.destroy()
 
 createGrammarListView = ->
-  editor = atom.workspace.getActiveEditor()
+  editor = atom.workspace.getActiveTextEditor()
   if editor?
     GrammarListView = require './grammar-list-view'
     view = new GrammarListView(editor)
