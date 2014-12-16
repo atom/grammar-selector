@@ -26,7 +26,7 @@ class GrammarStatusView extends HTMLDivElement
     @configSubscription = atom.config.observe 'grammar-selector.showOnRightSideOfStatusBar', =>
       @attach()
 
-    clickHandler = -> atom.commands.dispatch(this, 'grammar-selector:show')
+    clickHandler = => atom.commands.dispatch(atom.views.getView(@getActiveTextEditor()), 'grammar-selector:show')
     @addEventListener('click', clickHandler)
     @clickSubscription = new Disposable => @removeEventListener('click', clickHandler)
 
