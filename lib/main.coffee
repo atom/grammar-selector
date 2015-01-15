@@ -10,7 +10,7 @@ module.exports =
 
   activate: ->
     commandDisposable = atom.commands.add('atom-text-editor', 'grammar-selector:show', createGrammarListView)
-    atom.packages.onDidActivateAll(createGrammarStatusView)
+    atom.packages.onDidActivateInitialPackages(createGrammarStatusView)
 
   deactivate: ->
     commandDisposable?.dispose()
