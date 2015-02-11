@@ -10,7 +10,6 @@ module.exports =
 
   activate: ->
     commandDisposable = atom.commands.add('atom-text-editor', 'grammar-selector:show', createGrammarListView)
-    atom.packages.onDidActivateInitialPackages(createGrammarStatusView)
 
   deactivate: ->
     commandDisposable?.dispose()
@@ -22,15 +21,13 @@ module.exports =
     grammarListView?.destroy()
     grammarListView = null
 
+  consumeStatusBar: (statusBar) ->
+    GrammarStatusView = require './grammar-status-view'
+    grammarStatusView = new GrammarStatusView().initialize(statusBar)
+    grammarStatusView.attach()
+
 createGrammarListView = ->
   unless grammarListView?
     GrammarListView = require './grammar-list-view'
     grammarListView = new GrammarListView()
   grammarListView.toggle()
-
-createGrammarStatusView = ->
-  statusBar = atom.views.getView(atom.workspace).querySelector("status-bar")
-  if statusBar?
-    GrammarStatusView = require './grammar-status-view'
-    grammarStatusView = new GrammarStatusView().initialize(statusBar)
-    grammarStatusView.attach()
