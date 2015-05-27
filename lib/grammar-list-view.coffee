@@ -1,4 +1,5 @@
-{SelectListView} = require 'atom-space-pen-views'
+{$$, SelectListView} = require 'atom-space-pen-views'
+{match} = require 'fuzzaldrin'
 
 # View to display a list of grammars to apply to the current editor.
 module.exports =
@@ -17,12 +18,37 @@ class GrammarListView extends SelectListView
     @cancel()
 
   viewForItem: (grammar) ->
-    element = document.createElement('li')
-    element.classList.add('active') if grammar is @currentGrammar
-    grammarName = grammar.name ? grammar.scopeName
-    element.textContent = grammarName
-    element.dataset.grammar = grammarName
-    element
+    # Style matched characters in search results
+    filterQuery = @getFilterQuery()
+    matches = match(grammar, filterQuery)
+
+    $$ ->
+      highlighter = (grammar, matches, offsetIndex) =>
+        lastIndex = 0
+        matchedChars = [] # Build up a set of matched chars to be more semantic
+
+        for matchIndex in matches
+          matchIndex -= offsetIndex
+          continue if matchIndex < 0 # If marking up the basename, omit grammar matches
+          unmatched = grammar.substring(lastIndex, matchIndex)
+          if unmatched
+            @span matchedChars.join(''), class: 'character-match' if matchedChars.length
+            matchedChars = []
+            @text unmatched
+          matchedChars.push(grammar[matchIndex])
+          lastIndex = matchIndex + 1
+
+        @span matchedChars.join(''), class: 'character-match' if matchedChars.length
+
+        # Remaining characters are plain text
+        @text grammar.substring(lastIndex)
+
+      element = document.createElement('li')
+      element.classList.add('active') if grammar is @currentGrammar
+      grammarName = grammar.name ? grammar.scopeName
+      element.textContent = highlighter(grammar, matches, 0)
+      element.dataset.grammar = grammarName
+      element
 
   cancelled: ->
     @panel?.destroy()
