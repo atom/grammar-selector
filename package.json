@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "atom-space-pen-views": "^2.0.0",
-    "fuzzaldrin": "^2.1.0",
     "underscore-plus": "^1.6.2"
   },
   "consumedServices": {
@@ -19,8 +18,5 @@
         "^1.0.0": "consumeStatusBar"
       }
     }
-  },
-  "devDependencies": {
-    "coffeelint": "^1.9.7"
   }
 }
