@@ -27,6 +27,11 @@
       "type": "boolean",
       "default": true,
       "description": "Show the active pane item's langauge on the right side of Atom's status bar, instead of the left."
+    },
+    "showAll": {
+      "type": "boolean",
+      "default": false,
+      "description": "Some grammars only exist to be embedded inside others, such as regular expressions. Enable this option to show these grammars in the selection menu."
     }
   }
 }

@@ -54,8 +54,9 @@ class GrammarListView extends SelectListView
       @attach()
 
   getGrammars: ->
+    showAll = atom.config.get 'grammar-selector.showAll'
     grammars = atom.grammars.getGrammars().filter (grammar) ->
-      grammar isnt atom.grammars.nullGrammar
+      grammar isnt atom.grammars.nullGrammar and (showAll isnt true or grammar.fileTypes.length > 0)
 
     grammars.sort (grammarA, grammarB) ->
       if grammarA.scopeName is 'text.plain'
