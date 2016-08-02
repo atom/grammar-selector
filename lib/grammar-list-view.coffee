@@ -31,12 +31,19 @@ class GrammarListView extends SelectListView
     @currentGrammar = null
 
   confirmed: (grammar) ->
-    if grammar is @autoDetect
-      atom.grammars.clearGrammarOverrideForPath(@editor.getPath())
-      @editor.reloadGrammar()
+    # TODO: remove this conditional once
+    if atom.textEditors.setGrammarOverride?
+      if grammar is @autoDetect
+        atom.textEditors.clearGrammarOverride(@editor)
+      else
+        atom.textEditors.setGrammarOverride(@editor, grammar.scopeName)
     else
-      atom.grammars.setGrammarOverrideForPath(@editor.getPath(), grammar.scopeName)
-      @editor.setGrammar(grammar)
+      if grammar is @autoDetect
+        atom.grammars.clearGrammarOverrideForPath(@editor.getPath())
+        @editor.reloadGrammar()
+      else
+        atom.grammars.setGrammarOverrideForPath(@editor.getPath(), grammar.scopeName)
+        @editor.setGrammar(grammar)
     @cancel()
 
   attach: ->
