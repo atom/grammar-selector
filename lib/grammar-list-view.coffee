@@ -31,7 +31,7 @@ class GrammarListView extends SelectListView
     @currentGrammar = null
 
   confirmed: (grammar) ->
-    # TODO: remove this conditional once
+    # TODO: remove this conditional once Atom v1.11.0 has been out for a while.
     if atom.textEditors.setGrammarOverride?
       if grammar is @autoDetect
         atom.textEditors.clearGrammarOverride(@editor)
