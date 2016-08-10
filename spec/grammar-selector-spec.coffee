@@ -104,7 +104,7 @@ describe "GrammarSelector", ->
       editor.setGrammar(atom.grammars.nullGrammar)
       expect(grammarStatus).toBeVisible()
       expect(grammarStatus.grammarLink.textContent).toBe 'Plain Text'
-      editor.reloadGrammar()
+      editor.setGrammar(atom.grammars.grammarForScopeName('source.js'))
       expect(grammarStatus).toBeVisible()
       expect(grammarStatus.grammarLink.textContent).toBe 'JavaScript'
 
@@ -131,12 +131,10 @@ describe "GrammarSelector", ->
 
     describe "when the editor's grammar changes", ->
       it "displays the new grammar of the editor", ->
-        atom.grammars.setGrammarOverrideForPath(editor.getPath(), 'text.plain')
-        editor.reloadGrammar()
+        editor.setGrammar(atom.grammars.grammarForScopeName('text.plain'))
         expect(grammarStatus.grammarLink.textContent).toBe 'Plain Text'
 
-        atom.grammars.setGrammarOverrideForPath(editor.getPath(), 'source.a')
-        editor.reloadGrammar()
+        editor.setGrammar(atom.grammars.grammarForScopeName('source.a'))
         expect(grammarStatus.grammarLink.textContent).toBe 'source.a'
 
     describe "when clicked", ->
