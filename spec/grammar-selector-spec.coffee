@@ -40,11 +40,16 @@ describe "GrammarSelector", ->
     it "displays a list of all the available grammars", ->
       atom.commands.dispatch(editorView, 'grammar-selector:show')
       grammarView = atom.workspace.getModalPanels()[0].getItem()
-      expect(grammarView.list.children('li').length).toBe atom.grammars.grammars.length
       expect(grammarView.list.children('li:first').text()).toBe 'Auto Detect'
-      expect(grammarView.list.children('li:contains(source.a)')).toExist()
+      expect(grammarView.list.children('li:contains("Language with Name")')).toExist()
       for li in grammarView.list.children('li')
         expect($(li).text()).not.toBe atom.grammars.nullGrammar.name
+
+    it "only shows grammars with a `name` property defined", ->
+      atom.commands.dispatch(editorView, 'grammar-selector:show')
+      grammarView = atom.workspace.getModalPanels()[0].getItem()
+      expect(grammarView.list.children('li:contains(source.a)')).not.toExist()
+      expect(grammarView.list.children('li').length).toBe atom.grammars.grammars.length - 1
 
   describe "when a grammar is selected", ->
     it "sets the new grammar on the editor", ->

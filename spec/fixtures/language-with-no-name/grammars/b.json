@@ -1,0 +1,9 @@
+{
+  "name": "Language with Name",
+  "scopeName": "source.b",
+  "fileTypes": [
+    ".b",
+    ".bb",
+    "b"
+  ]
+}

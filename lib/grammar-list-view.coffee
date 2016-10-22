@@ -62,7 +62,7 @@ class GrammarListView extends SelectListView
 
   getGrammars: ->
     grammars = atom.grammars.getGrammars().filter (grammar) ->
-      grammar isnt atom.grammars.nullGrammar
+      grammar isnt atom.grammars.nullGrammar and grammar.name
 
     grammars.sort (grammarA, grammarB) ->
       if grammarA.scopeName is 'text.plain'
