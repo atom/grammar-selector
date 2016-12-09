@@ -97,22 +97,34 @@ describe "GrammarSelector", ->
       grammarStatus = grammarTile.getItem()
       jasmine.attachToDOM(grammarStatus)
 
+      waitsFor ->
+        grammarStatus.offsetHeight > 0
+
     it "displays the name of the current grammar", ->
-      expect(grammarStatus.grammarLink.textContent).toBe 'JavaScript'
+      grammarStatus.querySelector('a').textContent is 'JavaScript'
 
     it "displays Plain Text when the current grammar is the null grammar", ->
       editor.setGrammar(atom.grammars.nullGrammar)
-      expect(grammarStatus).toBeVisible()
-      expect(grammarStatus.grammarLink.textContent).toBe 'Plain Text'
-      editor.setGrammar(atom.grammars.grammarForScopeName('source.js'))
-      expect(grammarStatus).toBeVisible()
-      expect(grammarStatus.grammarLink.textContent).toBe 'JavaScript'
+
+      waitsFor ->
+        grammarStatus.querySelector('a').textContent is 'Plain Text'
+
+      runs ->
+        expect(grammarStatus).toBeVisible()
+        editor.setGrammar(atom.grammars.grammarForScopeName('source.js'))
+
+      waitsFor ->
+        grammarStatus.querySelector('a').textContent is 'JavaScript'
+
+      runs ->
+        expect(grammarStatus).toBeVisible()
 
     it "hides the label when the current grammar is null", ->
       jasmine.attachToDOM(editorView)
       spyOn(editor, 'getGrammar').andReturn null
       editor.setGrammar(atom.grammars.nullGrammar)
-      expect(grammarStatus).toBeHidden()
+      waitsFor ->
+        grammarStatus.offsetHeight is 0
 
     describe "when the grammar-selector.showOnRightSideOfStatusBar setting changes", ->
       it "moves the item to the preferred side of the status bar", ->
@@ -132,10 +144,15 @@ describe "GrammarSelector", ->
     describe "when the editor's grammar changes", ->
       it "displays the new grammar of the editor", ->
         editor.setGrammar(atom.grammars.grammarForScopeName('text.plain'))
-        expect(grammarStatus.grammarLink.textContent).toBe 'Plain Text'
 
-        editor.setGrammar(atom.grammars.grammarForScopeName('source.a'))
-        expect(grammarStatus.grammarLink.textContent).toBe 'source.a'
+        waitsFor ->
+          grammarStatus.querySelector('a').textContent is 'Plain Text'
+
+        runs ->
+          editor.setGrammar(atom.grammars.grammarForScopeName('source.a'))
+
+        waitsFor ->
+          grammarStatus.querySelector('a').textContent is 'source.a'
 
     describe "when clicked", ->
       it "shows the grammar selector modal", ->
