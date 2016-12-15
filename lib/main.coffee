@@ -1,3 +1,6 @@
+GrammarListView = require './grammar-list-view'
+GrammarStatusView = require './grammar-status-view'
+
 commandDisposable = null
 grammarListView = null
 grammarStatusView = null
@@ -17,12 +20,9 @@ module.exports =
     grammarListView = null
 
   consumeStatusBar: (statusBar) ->
-    GrammarStatusView = require './grammar-status-view'
-    grammarStatusView = new GrammarStatusView().initialize(statusBar)
+    grammarStatusView = new GrammarStatusView(statusBar)
     grammarStatusView.attach()
 
 createGrammarListView = ->
-  unless grammarListView?
-    GrammarListView = require './grammar-list-view'
-    grammarListView = new GrammarListView()
+  grammarListView ?= new GrammarListView()
   grammarListView.toggle()
