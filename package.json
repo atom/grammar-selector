@@ -27,7 +27,7 @@
     "showOnRightSideOfStatusBar": {
       "type": "boolean",
       "default": true,
-      "description": "Show the active pane item's langauge on the right side of Atom's status bar, instead of the left."
+      "description": "Show the active pane item's language on the right side of Atom's status bar, instead of the left."
     }
   }
 }
