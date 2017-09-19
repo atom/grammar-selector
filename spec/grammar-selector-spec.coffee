@@ -44,9 +44,9 @@ describe "GrammarSelector", ->
 
       runs ->
         grammarView = atom.workspace.getModalPanels()[0].getItem().element
-        expect(grammarView.querySelectorAll('li').length).toBe(atom.grammars.grammars.length)
+        expect(grammarView.querySelectorAll('li').length).toBe(atom.grammars.grammars.length - 1)
         expect(grammarView.querySelectorAll('li')[0].textContent).toBe 'Auto Detect'
-        expect(grammarView.textContent.includes('source.a')).toBe(true)
+        expect(grammarView.textContent.includes('source.a')).toBe(false)
         for li in grammarView.querySelectorAll('li')
           expect(li.textContent).not.toBe(atom.grammars.nullGrammar.name)
 
