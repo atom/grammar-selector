@@ -44,7 +44,12 @@ describe "GrammarSelector", ->
 
       runs ->
         grammarView = atom.workspace.getModalPanels()[0].getItem().element
-        expect(grammarView.querySelectorAll('li').length).toBe(atom.grammars.grammars.length - 1)
+        # TODO: Remove once Atom 1.23 reaches stable
+        if parseFloat(atom.getVersion()) >= 1.23
+          # Do not take into account the two JS regex grammars or language-with-no-name
+          expect(grammarView.querySelectorAll('li').length).toBe(atom.grammars.grammars.length - 3)
+        else
+          expect(grammarView.querySelectorAll('li').length).toBe(atom.grammars.grammars.length - 1)
         expect(grammarView.querySelectorAll('li')[0].textContent).toBe 'Auto Detect'
         expect(grammarView.textContent.includes('source.a')).toBe(false)
         for li in grammarView.querySelectorAll('li')
