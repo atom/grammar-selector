@@ -1,5 +1,4 @@
 path = require 'path'
-{last, invoke} = require 'underscore-plus'
 
 describe "GrammarSelector", ->
   [editor, editorView, workspaceElement, textGrammar, jsGrammar] =  []
@@ -127,7 +126,7 @@ describe "GrammarSelector", ->
     beforeEach ->
       atom.packages.emitter.emit('did-activate-all')
       statusBar = workspaceElement.querySelector("status-bar")
-      grammarTile = last(statusBar.getLeftTiles())
+      [..., grammarTile] = statusBar.getLeftTiles()
       grammarStatus = grammarTile.getItem()
       jasmine.attachToDOM(grammarStatus)
 
@@ -162,18 +161,18 @@ describe "GrammarSelector", ->
 
     describe "when the grammar-selector.showOnRightSideOfStatusBar setting changes", ->
       it "moves the item to the preferred side of the status bar", ->
-        expect(invoke(statusBar.getLeftTiles(), 'getItem')).toContain(grammarStatus)
-        expect(invoke(statusBar.getRightTiles(), 'getItem')).not.toContain(grammarStatus)
+        expect(statusBar.getLeftTiles().map((tile) -> tile.getItem())).toContain(grammarStatus)
+        expect(statusBar.getRightTiles().map((tile) -> tile.getItem())).not.toContain(grammarStatus)
 
         atom.config.set("grammar-selector.showOnRightSideOfStatusBar", true)
 
-        expect(invoke(statusBar.getLeftTiles(), 'getItem')).not.toContain(grammarStatus)
-        expect(invoke(statusBar.getRightTiles(), 'getItem')).toContain(grammarStatus)
+        expect(statusBar.getLeftTiles().map((tile) -> tile.getItem())).not.toContain(grammarStatus)
+        expect(statusBar.getRightTiles().map((tile) -> tile.getItem())).toContain(grammarStatus)
 
         atom.config.set("grammar-selector.showOnRightSideOfStatusBar", false)
 
-        expect(invoke(statusBar.getLeftTiles(), 'getItem')).toContain(grammarStatus)
-        expect(invoke(statusBar.getRightTiles(), 'getItem')).not.toContain(grammarStatus)
+        expect(statusBar.getLeftTiles().map((tile) -> tile.getItem())).toContain(grammarStatus)
+        expect(statusBar.getRightTiles().map((tile) -> tile.getItem())).not.toContain(grammarStatus)
 
     describe "when the editor's grammar changes", ->
       it "displays the new grammar of the editor", ->
