@@ -97,7 +97,7 @@ describe('GrammarSelector', () => {
     })
   )
 
-  fdescribe('Status bar grammar label', () => {
+  describe('Status bar grammar label', () => {
     let [grammarStatus, grammarTile, statusBar] = []
 
     beforeEach(async () => {
