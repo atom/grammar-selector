@@ -114,6 +114,7 @@ describe('GrammarSelector', () => {
 
     it('displays the name of the current grammar', () => {
       expect(grammarStatus.querySelector('a').textContent).toBe('JavaScript')
+      expect(getTooltipText(grammarStatus)).toBe('File uses the JavaScript grammar')
     })
 
     it('displays Plain Text when the current grammar is the null grammar', async () => {
@@ -122,6 +123,7 @@ describe('GrammarSelector', () => {
 
       expect(grammarStatus.querySelector('a').textContent).toBe('Plain Text')
       expect(grammarStatus).toBeVisible()
+      expect(getTooltipText(grammarStatus)).toBe('File uses the Plain Text grammar')
 
       editor.setGrammar(atom.grammars.grammarForScopeName('source.js'))
       await atom.views.getNextUpdatePromise()
@@ -161,11 +163,13 @@ describe('GrammarSelector', () => {
         await atom.views.getNextUpdatePromise()
 
         expect(grammarStatus.querySelector('a').textContent).toBe('Plain Text')
+        expect(getTooltipText(grammarStatus)).toBe('File uses the Plain Text grammar')
 
         editor.setGrammar(atom.grammars.grammarForScopeName('source.a'))
         await atom.views.getNextUpdatePromise()
 
         expect(grammarStatus.querySelector('a').textContent).toBe('source.a')
+        expect(getTooltipText(grammarStatus)).toBe('File uses the source.a grammar')
       })
     )
 
@@ -187,3 +191,8 @@ describe('GrammarSelector', () => {
     )
   })
 })
+
+function getTooltipText (element) {
+  const [tooltip] = atom.tooltips.findTooltips(element)
+  return tooltip.getTitle()
+}
